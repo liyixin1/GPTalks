@@ -1,9 +1,10 @@
 from PyQt6.QtWidgets import QApplication, QMainWindow
 from main_window_ui import Ui_MainWindow  # 从你的 UI 文件中导入 UI 类
 
+import sys
+
 
 def main():
-    import sys
     app = QApplication(sys.argv)
     main_window = QMainWindow()
     ui = Ui_MainWindow()
