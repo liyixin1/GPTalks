@@ -1,19 +1,12 @@
 import requests
 import json
 
-import tomli
+import config
 
 url = "https://api.openai.com/v1/chat/completions"
 
 
-def read_toml_file(file_path):
-    with open(file_path, "rb") as f:  # TOML文件需要以二进制模式打开
-        toml_dict = tomli.load(f)
-    return toml_dict
-
-
-config = read_toml_file("config.toml")
-open_key = config["openai"]["api_key"]
+open_key = config.openai.api_key
 
 
 def get_gpt_response(user_input):
