@@ -18,93 +18,105 @@
     <normaloff>image/windows_logo.png</normaloff>image/windows_logo.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_3">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <widget class="QListWidget" name="listWidget_session"/>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <widget class="QSplitter" name="splitter_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="QWidget" name="layoutWidget_3">
+       <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
-         <widget class="QPushButton" name="pushButton_new">
+         <widget class="QListWidget" name="listWidget_session"/>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QPushButton" name="pushButton_new">
+            <property name="text">
+             <string> 新建会话</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>image/new.svg</normaloff>image/new.svg</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_delect">
+            <property name="text">
+             <string> 删除会话</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>image/delect.svg</normaloff>image/delect.svg</iconset>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_settings">
           <property name="text">
-           <string> 新建会话</string>
+           <string> 设置</string>
           </property>
           <property name="icon">
            <iconset>
-            <normaloff>image/new.svg</normaloff>image/new.svg</iconset>
+            <normaloff>image/setting.svg</normaloff>image/setting.svg</iconset>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_delect">
+         <widget class="QPushButton" name="pushButton_about">
           <property name="text">
-           <string> 删除会话</string>
+           <string> 关于</string>
           </property>
           <property name="icon">
            <iconset>
-            <normaloff>image/delect.svg</normaloff>image/delect.svg</iconset>
+            <normaloff>image/about.svg</normaloff>image/about.svg</iconset>
           </property>
          </widget>
         </item>
        </layout>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_settings">
-        <property name="text">
-         <string> 设置</string>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>image/setting.svg</normaloff>image/setting.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_about">
-        <property name="text">
-         <string>关于</string>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>image/about.svg</normaloff>image/about.svg</iconset>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QLineEdit" name="lineEdit_name"/>
-      </item>
-      <item>
-       <widget class="QTextBrowser" name="textBrowser_show"/>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
+      </widget>
+      <widget class="QWidget" name="verticalLayoutWidget_2">
+       <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
-         <widget class="QPlainTextEdit" name="plainTextEdit_input">
-          <property name="placeholderText">
-           <string>发送消息给 GPTalks...</string>
-          </property>
-         </widget>
+         <widget class="QLineEdit" name="lineEdit_name"/>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_commit">
-          <property name="text">
-           <string> 提交</string>
+         <widget class="QSplitter" name="splitter_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
           </property>
-          <property name="icon">
-           <iconset>
-            <normaloff>image/commit.svg</normaloff>image/commit.svg</iconset>
-          </property>
+          <widget class="QTextBrowser" name="textBrowser_show"/>
+          <widget class="QWidget" name="layoutWidget_4">
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QPlainTextEdit" name="plainTextEdit_input">
+              <property name="placeholderText">
+               <string>发送消息给 GPTalks...</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_commit">
+              <property name="text">
+               <string> 提交</string>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>image/commit.svg</normaloff>image/commit.svg</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </item>
        </layout>
-      </item>
-     </layout>
+      </widget>
+     </widget>
     </item>
    </layout>
   </widget>
