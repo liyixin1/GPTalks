@@ -1,1 +1,5 @@
 __pycache__/
+build/
+dist/*
+!dist/README.md
+main.spec
