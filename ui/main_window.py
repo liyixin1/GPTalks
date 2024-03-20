@@ -21,8 +21,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.plainTextEdit_input.clear()
 
     def on_current_item_changed(self):
-        self.lineEdit_name.setText(self.listWidget_session.currentItem().text())
-        self.textBrowser_show.setText(self.listWidget_session.currentItem().record_to_display_text())
+        if self.listWidget_session.currentItem() is None:
+            self.lineEdit_name.setText("")
+            self.textBrowser_show.setText("")
+        else:
+            self.lineEdit_name.setText(self.listWidget_session.currentItem().text())
+            self.textBrowser_show.setText(self.listWidget_session.currentItem().record_to_display_text())
 
     def on_new_button_clicked(self):
         new_item = ListWidgetItem("会话" + str(self.listWidget_session.count() + 1))
