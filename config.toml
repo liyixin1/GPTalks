@@ -1,2 +1,5 @@
 [openai]
-api_key = "" #在此处输入你的key。
+api_key = "" #在""内输入你的key。
+chat_rounds = 10
+model = "gpt-3.5-turbo"
+max_tokens = 4096

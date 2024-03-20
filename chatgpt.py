@@ -6,10 +6,20 @@ import config
 url = "https://api.openai.com/v1/chat/completions"
 
 open_key = config.openai.api_key
+chat_rounds = config.openai.chat_rounds
+model = config.openai.model
+max_tokens = config.openai.max_tokens
 
 
 def user_input_to_record_item(user_input):
     return {"role": "user", "content": user_input}
+
+
+def limit_to_chat_rounds(record) -> list:
+    if (len(record)) > chat_rounds * 2:
+        return record[(len(record)) - chat_rounds * 2 + 1:]
+    else:
+        return record
 
 
 def get_gpt_response(record) -> list:
@@ -20,8 +30,9 @@ def get_gpt_response(record) -> list:
     #     }
     # ]
     payload = json.dumps({
-        "model": "gpt-3.5-turbo",
-        "messages": record
+        "model": model,
+        "messages": limit_to_chat_rounds(record),
+        "max_tokens": max_tokens
     })
 
     response = requests.request("POST", url, headers=headers, data=payload)
