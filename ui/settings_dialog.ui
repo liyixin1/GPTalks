@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>settings_dialog</class>
+ <widget class="QDialog" name="settings_dialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>666</width>
+    <height>408</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
@@ -23,74 +23,201 @@
       <attribute name="title">
        <string>模型</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QWidget" name="widget" native="true">
-         <layout class="QVBoxLayout" name="verticalLayout_4">
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_3">
-            <item alignment="Qt::AlignTop">
-             <widget class="QPlainTextEdit" name="plainTextEdit_api_key">
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>30</height>
-               </size>
-              </property>
-              <property name="placeholderText">
-               <string>OpenAI API Key</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="Line" name="line">
-              <property name="frameShadow">
-               <enum>QFrame::Sunken</enum>
-              </property>
-              <property name="lineWidth">
-               <number>30</number>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPlainTextEdit" name="plainTextEdit_model">
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>30</height>
-               </size>
-              </property>
-              <property name="placeholderText">
-               <string>模型</string>
-              </property>
-             </widget>
-            </item>
-            <item alignment="Qt::AlignBottom">
-             <widget class="QPlainTextEdit" name="plainTextEdit_maxtokens">
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>30</height>
-               </size>
-              </property>
-              <property name="plainText">
-               <string/>
-              </property>
-              <property name="centerOnScroll">
-               <bool>false</bool>
-              </property>
-              <property name="placeholderText">
-               <string>max tokens</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetDefaultConstraint</enum>
+         </property>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <item>
+            <widget class="QLineEdit" name="lineEdit_api_key">
+             <property name="styleSheet">
+              <string notr="true">background-color: transparent;</string>
+             </property>
+             <property name="text">
+              <string>OpenAI API Key</string>
+             </property>
+             <property name="frame">
+              <bool>false</bool>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPlainTextEdit" name="plainTextEdit_api_key">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="lineWrapMode">
+              <enum>QPlainTextEdit::NoWrap</enum>
+             </property>
+             <property name="placeholderText">
+              <string>OpenAI API Key</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="Line" name="line">
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+           <property name="lineWidth">
+            <number>30</number>
+           </property>
+           <property name="midLineWidth">
+            <number>2</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QLineEdit" name="lineEdit_model">
+             <property name="styleSheet">
+              <string notr="true">background-color: transparent;</string>
+             </property>
+             <property name="text">
+              <string>GPT模型</string>
+             </property>
+             <property name="frame">
+              <bool>false</bool>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPlainTextEdit" name="plainTextEdit_model">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="lineWrapMode">
+              <enum>QPlainTextEdit::NoWrap</enum>
+             </property>
+             <property name="placeholderText">
+              <string>模型</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_7">
+           <item>
+            <widget class="QLineEdit" name="lineEdit_max_tokens">
+             <property name="styleSheet">
+              <string notr="true">background-color: transparent;</string>
+             </property>
+             <property name="text">
+              <string>最大tokens数</string>
+             </property>
+             <property name="frame">
+              <bool>false</bool>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPlainTextEdit" name="plainTextEdit_maxtokens">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="inputMethodHints">
+              <set>Qt::ImhDigitsOnly|Qt::ImhFormattedNumbersOnly|Qt::ImhPreferNumbers</set>
+             </property>
+             <property name="lineWrapMode">
+              <enum>QPlainTextEdit::NoWrap</enum>
+             </property>
+             <property name="plainText">
+              <string/>
+             </property>
+             <property name="centerOnScroll">
+              <bool>false</bool>
+             </property>
+             <property name="placeholderText">
+              <string>max tokens</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <item>
+            <widget class="QLineEdit" name="lineEdit">
+             <property name="maximumSize">
+              <size>
+               <width>130</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="autoFillBackground">
+              <bool>false</bool>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: transparent;</string>
+             </property>
+             <property name="text">
+              <string>限制上下文最大回合数</string>
+             </property>
+             <property name="frame">
+              <bool>false</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_rounds">
+             <property name="maximumSize">
+              <size>
+               <width>30</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="horizontalSlider_rounds">
+             <property name="value">
+              <number>0</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -98,17 +225,42 @@
       <attribute name="title">
        <string>对话</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
         <widget class="QWidget" name="widget_2" native="true">
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item alignment="Qt::AlignVCenter">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLineEdit" name="lineEdit_prompt">
+            <property name="styleSheet">
+             <string notr="true">background-color: transparent;</string>
+            </property>
+            <property name="text">
+             <string>你希望给GPT的提示</string>
+            </property>
+            <property name="frame">
+             <bool>false</bool>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignTop">
            <widget class="QPlainTextEdit" name="plainTextEdit_prompt">
             <property name="maximumSize">
              <size>
               <width>16777215</width>
-              <height>30</height>
+              <height>200</height>
              </size>
+            </property>
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="sizeAdjustPolicy">
+             <enum>QAbstractScrollArea::AdjustToContents</enum>
             </property>
             <property name="placeholderText">
              <string>新对话的默认提示</string>
@@ -120,7 +272,10 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_others">
+     <widget class="QWidget" name="tab_other">
+      <property name="accessibleName">
+       <string/>
+      </property>
       <attribute name="title">
        <string>其他</string>
       </attribute>
@@ -144,32 +299,32 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>settings_dialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>332</x>
+     <y>385</y>
     </hint>
     <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
+     <x>332</x>
+     <y>203</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>settings_dialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>332</x>
+     <y>385</y>
     </hint>
     <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
+     <x>332</x>
+     <y>203</y>
     </hint>
    </hints>
   </connection>
