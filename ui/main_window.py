@@ -1,6 +1,7 @@
-from PyQt6.QtWidgets import QMainWindow
+from PyQt6.QtWidgets import QMainWindow, QDialog
 
 from list_widget_Item import ListWidgetItem
+from ui.about_dialog_ui import Ui_about_dialog
 from ui.setting_dialog import SettingDialog
 from ui.main_window_ui import Ui_MainWindow
 
@@ -9,6 +10,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.settings_dialog = None
+        self.about_dialog = None
         self.setupUi(self)
         self.pushButton_commit.clicked.connect(self.on_commit_button_clicked)  # 提交按钮点击信号
         self.listWidget_session.currentItemChanged.connect(self.on_current_item_changed)  # 鼠标点击会话列表项信号
@@ -16,6 +18,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_delect.clicked.connect(self.on_delect_button_clicked)  # 删除会话按钮点击信号
         self.lineEdit_name.editingFinished.connect(self.on_session_name_editing_finished)
         self.pushButton_settings.clicked.connect(self.on_setting_button_clicked)
+        self.pushButton_about.clicked.connect(self.on_about_button_clicked)
 
     def on_commit_button_clicked(self):
         if self.listWidget_session.count() == 0:  # 如果当前不存在会话记录，则新建一个
@@ -47,3 +50,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def on_setting_button_clicked(self):
         self.settings_dialog = SettingDialog()
         self.settings_dialog.show()
+
+    def on_about_button_clicked(self):
+        dialog = QDialog()
+        self.about_dialog = Ui_about_dialog()
+        self.about_dialog.setupUi(dialog)
+        self.about_dialog.show = dialog.show
+        self.about_dialog.show()
