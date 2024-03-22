@@ -24,7 +24,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.listWidget_session.count() == 0:  # 如果当前不存在会话记录，则新建一个
             self.on_new_button_clicked()
         self.textBrowser_show.setText(
-            self.listWidget_session.currentItem().get_record(self.plainTextEdit_input.toPlainText()))
+            self.listWidget_session.currentItem().get_record(
+                self.plainTextEdit_input.toPlainText(),
+                self.listWidget_session.currentItem().text()
+            )
+        )
         self.plainTextEdit_input.clear()
 
     def on_current_item_changed(self):

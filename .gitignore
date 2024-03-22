@@ -3,3 +3,4 @@ build/
 dist/*
 !dist/README.md
 *.spec
+chat_record_logs/
