@@ -5,11 +5,10 @@ import json
 
 import config
 
-url = "https://api.openai.com/v1/chat/completions"
-
 
 class ChatGPT:
     def __init__(self):
+        self.url = "https://api.openai.com/v1/chat/completions"
         self.api_key = config.openai.api_key
         self.model = config.openai.model
         self.chat_rounds = config.openai.chat_rounds
@@ -44,7 +43,7 @@ class ChatGPT:
             "max_tokens": self.max_tokens
         })
 
-        response = requests.request("POST", url, headers=self.headers, data=payload)
+        response = requests.request("POST", self.url, headers=self.headers, data=payload)
         response_json = response.json()
         # 从响应中获取并返回所需的文本
         return response_json.get("choices", [{}])[0].get("message", [])

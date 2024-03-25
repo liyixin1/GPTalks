@@ -11,7 +11,7 @@ class ChatRecordLog:
         self.log_dir = './chat_record_logs/' + str(self.today)
         self.user_log = logging.getLogger("user")
         self.chatgpt_log = logging.getLogger('chatgpt')
-        self.system_log = logging.getLogger('system')
+        self.debug_log = logging.getLogger('debug')
         if not os.path.exists(self.log_dir):
             os.makedirs(self.log_dir)
 
@@ -28,6 +28,10 @@ class ChatRecordLog:
             self.user_log.info(record['content'])
         elif record['role'] == 'assistant':
             self.chatgpt_log.info(record['content'])
+
+    def chat_debug(self, record):
+        logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+        self.debug_log.debug(record)
 
 
 chat_record_log = ChatRecordLog()

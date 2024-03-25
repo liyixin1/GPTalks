@@ -15,7 +15,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_commit.clicked.connect(self.on_commit_button_clicked)  # 提交按钮点击信号
         self.listWidget_session.currentItemChanged.connect(self.on_current_item_changed)  # 鼠标点击会话列表项信号
         self.pushButton_new.clicked.connect(self.on_new_button_clicked)  # 新建会话按钮点击信号
-        self.pushButton_delect.clicked.connect(self.on_delect_button_clicked)  # 删除会话按钮点击信号
+        self.pushButton_delect.clicked.connect(self.on_delete_button_clicked)  # 删除会话按钮点击信号
         self.lineEdit_name.editingFinished.connect(self.on_session_name_editing_finished)
         self.pushButton_settings.clicked.connect(self.on_setting_button_clicked)
         self.pushButton_about.clicked.connect(self.on_about_button_clicked)
@@ -37,14 +37,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.textBrowser_show.setText("")
         else:
             self.lineEdit_name.setText(self.listWidget_session.currentItem().text())
-            self.textBrowser_show.setText(self.listWidget_session.currentItem().record_to_display_text())
+            self.textBrowser_show.setHtml(self.listWidget_session.currentItem().record_to_display_text())
 
     def on_new_button_clicked(self):
         new_item = ListWidgetItem("会话" + str(self.listWidget_session.count() + 1))
         self.listWidget_session.addItem(new_item)
         self.listWidget_session.setCurrentItem(new_item)
 
-    def on_delect_button_clicked(self):
+    def on_delete_button_clicked(self):
         del_item = self.listWidget_session.takeItem(self.listWidget_session.currentRow())
         del del_item
 
