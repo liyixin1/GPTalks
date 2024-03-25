@@ -1,4 +1,3 @@
-
 from PyQt6.QtWidgets import QDialog
 
 from chatgpt import chatgpt
@@ -44,5 +43,3 @@ class SettingDialog(QDialog, Ui_settings_dialog):
 
     def on_rounds_slider_changed(self):
         self.lineEdit_rounds.setText(str(self.horizontalSlider_rounds.value()))
-
-

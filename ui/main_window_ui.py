@@ -12,10 +12,11 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.resize(1000, 800)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("C:\\Users\\13677\\Desktop\\graduation_project\\GPTalks\\ui\\image/windows_logo.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         MainWindow.setWindowIcon(icon)
+        MainWindow.setStyleSheet("font: 12pt \"Microsoft YaHei UI\";")
         self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -89,7 +90,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.splitter_2)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(parent=MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1000, 27))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(parent=MainWindow)

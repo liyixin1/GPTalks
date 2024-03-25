@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1000</width>
+    <height>800</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,6 +16,9 @@
   <property name="windowIcon">
    <iconset>
     <normaloff>image/windows_logo.png</normaloff>image/windows_logo.png</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">font: 12pt &quot;Microsoft YaHei UI&quot;;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -125,8 +128,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>22</height>
+     <width>1000</width>
+     <height>27</height>
     </rect>
    </property>
   </widget>

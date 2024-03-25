@@ -32,9 +32,9 @@ class ListWidgetItem(QtWidgets.QListWidgetItem):
 
         for i in self.record:
             if i['role'] == "user":
-                return_record.append("## 你：\n" + i['content'])
+                return_record.append("### 你：\n" + i['content'])
             elif i['role'] == "assistant":
-                return_record.append("## chatGPT:\n" + i['content'])
+                return_record.append("### chatGPT:\n" + i['content'])
 
         html_text = markdown.markdown('\n'.join(return_record),
                                       extensions=[
@@ -45,7 +45,7 @@ class ListWidgetItem(QtWidgets.QListWidgetItem):
                                           'footnotes',
                                           'tables',
                                       ])
-        with open('./css/github-style.css', 'r',
+        with open('./css/github-style-gpt.css', 'r',
                   encoding='utf-8') as css_file:
             css_content = css_file.read()
         return f"<style>{css_content}</style>{html_text}"

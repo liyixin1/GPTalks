@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QMainWindow, QDialog
 
 from list_widget_Item import ListWidgetItem
 from ui.about_dialog_ui import Ui_about_dialog
+from ui.plain_text_edit import MyPlainTextEdit
 from ui.setting_dialog import SettingDialog
 from ui.main_window_ui import Ui_MainWindow
 
@@ -12,6 +13,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.settings_dialog = None
         self.about_dialog = None
         self.setupUi(self)
+        self.horizontalLayout_4.removeWidget(self.plainTextEdit_input)
+        self.plainTextEdit_input = MyPlainTextEdit(parent=self.layoutWidget_4)
+        self.plainTextEdit_input.setObjectName("plainTextEdit_input")
+        # 通过remove将按钮控件拿出来，先添加输入框在添加按钮，使其相对位置不变
+        self.horizontalLayout_4.removeWidget(self.pushButton_commit)
+        self.horizontalLayout_4.addWidget(self.plainTextEdit_input)
+        self.horizontalLayout_4.addWidget(self.pushButton_commit)
+
         self.pushButton_commit.clicked.connect(self.on_commit_button_clicked)  # 提交按钮点击信号
         self.listWidget_session.currentItemChanged.connect(self.on_current_item_changed)  # 鼠标点击会话列表项信号
         self.pushButton_new.clicked.connect(self.on_new_button_clicked)  # 新建会话按钮点击信号
@@ -19,6 +28,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.lineEdit_name.editingFinished.connect(self.on_session_name_editing_finished)
         self.pushButton_settings.clicked.connect(self.on_setting_button_clicked)
         self.pushButton_about.clicked.connect(self.on_about_button_clicked)
+        self.plainTextEdit_input.ctrlEnterPressed.connect(self.on_commit_button_clicked)
 
     def on_commit_button_clicked(self):
         if self.listWidget_session.count() == 0:  # 如果当前不存在会话记录，则新建一个
