@@ -12,6 +12,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_about_dialog(object):
     def setupUi(self, about_dialog):
         about_dialog.setObjectName("about_dialog")
+        about_dialog.setWindowModality(QtCore.Qt.WindowModality.ApplicationModal)
         about_dialog.setEnabled(True)
         about_dialog.resize(400, 300)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
@@ -21,6 +22,7 @@ class Ui_about_dialog(object):
         about_dialog.setSizePolicy(sizePolicy)
         about_dialog.setMinimumSize(QtCore.QSize(400, 300))
         about_dialog.setMaximumSize(QtCore.QSize(400, 300))
+        about_dialog.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.ArrowCursor))
         about_dialog.setSizeGripEnabled(False)
         about_dialog.setModal(False)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(about_dialog)
@@ -71,7 +73,7 @@ class Ui_about_dialog(object):
 
     def retranslateUi(self, about_dialog):
         _translate = QtCore.QCoreApplication.translate
-        about_dialog.setWindowTitle(_translate("about_dialog", "Dialog"))
+        about_dialog.setWindowTitle(_translate("about_dialog", "关于"))
         self.lineEdit.setText(_translate("about_dialog", "GPTalks"))
         self.textEdit.setHtml(_translate("about_dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"

@@ -1,4 +1,5 @@
 import os
+import threading
 
 import requests
 import json
@@ -8,6 +9,8 @@ import config
 
 class ChatGPT:
     def __init__(self):
+        self.thread = threading.Thread(target=self.set_gpt_parameter)
+        self.thread.start()
         self.url = "https://api.openai.com/v1/chat/completions"
         self.api_key = config.openai.api_key
         self.model = config.openai.model
@@ -26,7 +29,7 @@ class ChatGPT:
 
     def limit_to_chat_rounds(self, record) -> list:
         if (len(record)) > self.chat_rounds * 2:
-            return record[(len(record)) - self.chat_rounds * 2 + 2:]  # 绕开发给chatGPT内容中的system内容
+            return record[(len(record)) - self.chat_rounds * 2 + 2:]  # 绕开chatGPT内容中的system内容
         else:
             return record
 
@@ -49,14 +52,17 @@ class ChatGPT:
         return response_json.get("choices", [{}])[0].get("message", [])
 
     def set_gpt_parameter(self):
-        if not config.openai.api_key:
-            self.api_key = os.getenv("OPENAI_API_KEY")
-        else:
-            self.api_key = config.openai.api_key
-        self.model = config.openai.model
-        self.chat_rounds = config.openai.chat_rounds
-        self.max_tokens = config.openai.max_tokens
-        self.chat_prompt = config.openai.chat_prompt
+        while True:
+            config.event.wait()
+            if not config.openai.api_key:
+                self.api_key = os.getenv("OPENAI_API_KEY")
+            else:
+                self.api_key = config.openai.api_key
+            self.model = config.openai.model
+            self.chat_rounds = config.openai.chat_rounds
+            self.max_tokens = config.openai.max_tokens
+            self.chat_prompt = config.openai.chat_prompt
+            print("set_gpt_parameter yes")
 
 
 chatgpt = ChatGPT()

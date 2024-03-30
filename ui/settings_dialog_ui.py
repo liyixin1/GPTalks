@@ -12,6 +12,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_settings_dialog(object):
     def setupUi(self, settings_dialog):
         settings_dialog.setObjectName("settings_dialog")
+        settings_dialog.setWindowModality(QtCore.Qt.WindowModality.ApplicationModal)
         settings_dialog.resize(666, 408)
         self.verticalLayout = QtWidgets.QVBoxLayout(settings_dialog)
         self.verticalLayout.setObjectName("verticalLayout")

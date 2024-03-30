@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>about_dialog</class>
  <widget class="QDialog" name="about_dialog">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
   <property name="enabled">
    <bool>true</bool>
   </property>
@@ -31,8 +34,11 @@
     <height>300</height>
    </size>
   </property>
+  <property name="cursor">
+   <cursorShape>ArrowCursor</cursorShape>
+  </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>关于</string>
   </property>
   <property name="sizeGripEnabled">
    <bool>false</bool>
