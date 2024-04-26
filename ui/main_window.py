@@ -2,32 +2,38 @@ import threading
 import time
 
 import pyaudio
-from PyQt6.QtWidgets import QMainWindow, QDialog
+from PyQt6.QtWidgets import QMainWindow
 
+import pydb
 from list_widget_Item import ListWidgetItem
 from speech_recognition import SpeechRecognition
 from ui.about_dialog import AboutDialog
-from ui.about_dialog_ui import Ui_about_dialog
+from ui.login_dialog import LoginDialog
 from ui.plain_text_edit import MyPlainTextEdit
 from ui.setting_dialog import SettingDialog
 from ui.main_window_ui import Ui_MainWindow
+from ui.signup_dialog import SignupDialog
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
+        self.sign_up_dialog = None
         self.settings_dialog = None
         self.about_dialog = None
         self.setupUi(self)
         self.horizontalLayout_4.removeWidget(self.plainTextEdit_input)
         self.plainTextEdit_input = MyPlainTextEdit(parent=self.layoutWidget_4)
         self.plainTextEdit_input.setObjectName("plainTextEdit_input")
+        self.label_name.setText("未登录")
+
         # 通过remove将按钮拿出来，先添加输入框再添加按钮，使其相对位置不变
         self.horizontalLayout_4.removeItem(self.verticalLayout_2)
         self.horizontalLayout_4.addWidget(self.plainTextEdit_input)
         self.horizontalLayout_4.addItem(self.verticalLayout_2)
         # -------------------------------------------------------
 
+        # 连接信号与槽
         self.pushButton_commit.clicked.connect(self.on_commit_button_clicked)  # 提交按钮点击信号
         self.listWidget_session.currentItemChanged.connect(self.on_current_item_changed)  # 鼠标点击会话列表项信号
         self.pushButton_new.clicked.connect(self.on_new_button_clicked)  # 新建会话按钮点击信号
@@ -37,13 +43,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_about.clicked.connect(self.on_about_button_clicked)
         self.plainTextEdit_input.ctrlEnterPressed.connect(self.on_commit_button_clicked)
         self.pushButton_audio.toggled.connect(self.on_audio_button_toggled)
+        self.login_dialog = LoginDialog()
+        self.login_dialog.goto_registration.connect(self.new_register_window)
+        self.sign_up_dialog = SignupDialog()
+        self.sign_up_dialog.registration_complete.connect(self.new_login_window)
+        self.login_dialog.login_successful.connect(self.login_end)
+        self.pushButton_logout.toggled.connect(self.on_logout_button_toggled)
+        # -------------------------------------------------------
 
         # 录音参数设置
         self.for_mat = pyaudio.paInt16  # 音频格式
         self.channels = 1  # 单声道
         self.rate = 16000  # 采样率
         self.chunk = 1024  # 每次读取的音频流长度
-        self.isSwitchOn = False
+        self.isSwitchOn = False  # 录音启停标记
+        # -------------------------------------------------------
+        # self.current_user = None
 
     def on_commit_button_clicked(self):
         if self.listWidget_session.count() == 0:  # 如果当前不存在会话记录，则新建一个
@@ -74,10 +89,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         del del_item
 
     def on_session_name_editing_finished(self):
-        self.listWidget_session.currentItem().setText(self.lineEdit_name.text())
+        if self.listWidget_session.count() != 0:
+            self.listWidget_session.currentItem().setText(self.lineEdit_name.text())
 
     def on_setting_button_clicked(self):
         self.settings_dialog = SettingDialog()
+        self.settings_dialog.set_user_information(self.label_name.text())
         self.settings_dialog.show()
 
     def on_about_button_clicked(self):
@@ -87,10 +104,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def on_audio_button_toggled(self, is_clicked):
         if is_clicked:
             self.isSwitchOn = True
+            self.pushButton_audio.setText("停止")
             thread = threading.Thread(target=self.start_or_stop_speech_to_text)
             thread.start()
         else:
             self.isSwitchOn = False
+            self.pushButton_audio.setText("语音")
 
     def start_or_stop_speech_to_text(self):
         audio = pyaudio.PyAudio()
@@ -116,3 +135,30 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         stream.stop_stream()
         stream.close()
         audio.terminate()
+
+    def new_register_window(self):
+        self.sign_up_dialog.show()
+        self.login_dialog.close()
+
+    def new_login_window(self):
+        self.login_dialog.show()
+        self.sign_up_dialog.close()
+
+    def login_end(self):
+        username = str(self.login_dialog.user_name)
+        # self.current_user = pydb.select_date(username)[0]
+        self.label_name.setText(username)
+        # user_avatar = pydb.select_one_date("avatar", "users","username", username)
+        # self.label_icon.setPixmap(user_avatar)
+        self.pushButton_logout.setText("退出登录")
+        self.login_dialog.close()
+
+    def on_logout_button_toggled(self, is_clicked):
+        if is_clicked:
+            # self.current_user = None
+            self.label_name.setText("未登录")
+            self.listWidget_session.clear()
+            self.textBrowser_show.clear()
+            self.pushButton_logout.setText("登录")
+        else:
+            self.login_dialog.show()

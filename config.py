@@ -1,8 +1,10 @@
 import os
+import sys
 import threading
 
 import tomli
 import tomlkit
+import mysql.connector
 
 
 def read_toml_file(file_path):
@@ -11,7 +13,7 @@ def read_toml_file(file_path):
     return toml_dict
 
 
-event = threading.Event()
+event1 = threading.Event()
 
 
 class Openai:
@@ -29,7 +31,7 @@ class Openai:
 
     def write_to_config(self):
         while True:
-            event.wait()
+            event1.wait()
             print(self.chat_rounds)
             with open('config.toml', 'r', encoding='utf-8') as f:
                 data = tomlkit.parse(f.read())
@@ -46,7 +48,7 @@ class Openai:
 openai = Openai()
 
 
-class Aliyun(object):
+class Aliyun:
     def __init__(self):
         if not read_toml_file("config.toml")["aliyun"]["access_key_id"]:
             self.access_key_id = os.getenv("ALIYUN_AK_ID")
@@ -61,3 +63,31 @@ class Aliyun(object):
 
 
 aliyun = Aliyun()
+
+
+class DateBase:
+    def __init__(self):
+        # 数据库连接配置
+        self.db_config = {
+            'user': 'root',
+            'password': '88888888',
+            'host': 'localhost',
+            'database': 'gpt_data'
+        }
+
+    def get_connection(self):
+        try:
+            conn = mysql.connector.connect(**self.db_config)
+            print("数据库连接成功。")
+            return conn
+        except mysql.connector.Error as e:
+            print("数据库连接失败:", e)
+            # 在这里处理连接失败的情况
+
+    def close_connection(self, conn, cursor):
+        if conn is not None:
+            cursor.close()
+            conn.close()
+
+
+database = DateBase()

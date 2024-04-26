@@ -34,7 +34,7 @@ class ChatGPT:
             return record
 
     def get_gpt_response(self, record) -> list:
-        # messages = [
+        # messages = [print(record)
         #     {
         #         "role": "user",
         #         "content": user_input
@@ -49,11 +49,12 @@ class ChatGPT:
         response = requests.request("POST", self.url, headers=self.headers, data=payload)
         response_json = response.json()
         # 从响应中获取并返回所需的文本
+        print(response_json)
         return response_json.get("choices", [{}])[0].get("message", [])
 
     def set_gpt_parameter(self):
         while True:
-            config.event.wait()
+            config.event1.wait()
             if not config.openai.api_key:
                 self.api_key = os.getenv("OPENAI_API_KEY")
             else:

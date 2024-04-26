@@ -34,7 +34,7 @@ class ListWidgetItem(QtWidgets.QListWidgetItem):
             if i['role'] == "user":
                 return_record.append("### 你：\n" + i['content'])
             elif i['role'] == "assistant":
-                return_record.append("### chatGPT:\n" + i['content'])
+                return_record.append("### ChatGPT:\n" + i['content'])
 
         html_text = markdown.markdown('\n'.join(return_record),
                                       extensions=[
