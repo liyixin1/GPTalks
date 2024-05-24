@@ -32,37 +32,6 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item alignment="Qt::AlignLeft">
-           <widget class="QLabel" name="label_icon">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="scaledContents">
-             <bool>true</bool>
-            </property>
-            <property name="wordWrap">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item alignment="Qt::AlignLeft">
            <widget class="QLabel" name="label_name">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -122,7 +91,7 @@
           <item>
            <widget class="QPushButton" name="pushButton_new">
             <property name="text">
-             <string> 新建会话</string>
+             <string> 新建对话</string>
             </property>
             <property name="icon">
              <iconset>
@@ -133,7 +102,7 @@
           <item>
            <widget class="QPushButton" name="pushButton_delect">
             <property name="text">
-             <string> 删除会话</string>
+             <string> 删除对话</string>
             </property>
             <property name="icon">
              <iconset>
@@ -187,7 +156,19 @@
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
-          <widget class="QTextBrowser" name="textBrowser_show"/>
+          <widget class="QTextBrowser" name="textBrowser_show">
+           <property name="font">
+            <font>
+             <family>Segoe UI Emoji</family>
+             <pointsize>9</pointsize>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">font: 9pt &quot;Segoe UI Emoji&quot;;</string>
+           </property>
+          </widget>
           <widget class="QWidget" name="layoutWidget_4">
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>

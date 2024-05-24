@@ -3,10 +3,18 @@ from mysql.connector import DatabaseError
 import config
 
 
-def insert_date(username, hashed, avatar):
+def insert_date(username, hashed):
     con = config.database.get_connection()
     cur = con.cursor()
-    cur.execute("INSERT INTO users (username, password_hash, avatar) VALUES (%s, %s, %s)", (username, hashed, avatar))
+    cur.execute("INSERT INTO users (username, password_hash) VALUES (%s, %s)", (username, hashed))
+    con.commit()
+    config.database.close_connection(con, cur)
+
+
+def insert_one_date(username):
+    con = config.database.get_connection()
+    cur = con.cursor()
+    cur.execute("INSERT INTO ai (name) VALUES (%s)", (username,))
     con.commit()
     config.database.close_connection(con, cur)
 
@@ -36,18 +44,19 @@ def select_one_date(value, table, condition, condition_data):
             print("not found")
             return None
     except DatabaseError as e:
+
         print(f"Error occurred during database operation: {e}")
     finally:
         config.database.close_connection(con, cur)
 
 
-def up_one_date(table, column, value, field_data):
+def up_one_date(table, condition, condition_data, value, field_data):
     con = config.database.get_connection()
     try:
         with con:
             cur = con.cursor()
-            sql = "UPDATE {} SET {} = %s WHERE id = %s".format(table, column)
-            cur.execute(sql, (value, field_data))
+            sql = "UPDATE {} SET {} = %s WHERE {} = %s".format(table, condition, value)
+            cur.execute(sql, (condition_data, field_data))
             con.commit()
             print("update OK")
     except DatabaseError as e:

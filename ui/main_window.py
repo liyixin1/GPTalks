@@ -4,10 +4,10 @@ import time
 import pyaudio
 from PyQt6.QtWidgets import QMainWindow
 
-import pydb
 from list_widget_Item import ListWidgetItem
 from speech_recognition import SpeechRecognition
 from ui.about_dialog import AboutDialog
+from ui.changepwd_dialog import ChangePwdDialog
 from ui.login_dialog import LoginDialog
 from ui.plain_text_edit import MyPlainTextEdit
 from ui.setting_dialog import SettingDialog
@@ -46,9 +46,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.login_dialog = LoginDialog()
         self.login_dialog.goto_registration.connect(self.new_register_window)
         self.sign_up_dialog = SignupDialog()
-        self.sign_up_dialog.registration_complete.connect(self.new_login_window)
+        self.sign_up_dialog.registration_complete.connect(self.new_login_window_signup)
         self.login_dialog.login_successful.connect(self.login_end)
         self.pushButton_logout.toggled.connect(self.on_logout_button_toggled)
+        self.login_dialog.goto_changepwd.connect(self.new_changepwd_window)
+        self.change_pwd_dialog = ChangePwdDialog()
+        self.change_pwd_dialog.change_complete.connect(self.new_login_window_changepwd)
         # -------------------------------------------------------
 
         # 录音参数设置
@@ -58,7 +61,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.chunk = 1024  # 每次读取的音频流长度
         self.isSwitchOn = False  # 录音启停标记
         # -------------------------------------------------------
-        # self.current_user = None
+        self.current_model = None
 
     def on_commit_button_clicked(self):
         if self.listWidget_session.count() == 0:  # 如果当前不存在会话记录，则新建一个
@@ -80,7 +83,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.textBrowser_show.setHtml(self.listWidget_session.currentItem().record_to_display_text())
 
     def on_new_button_clicked(self):
-        new_item = ListWidgetItem("会话" + str(self.listWidget_session.count() + 1))
+        new_item = ListWidgetItem("对话" + str(self.listWidget_session.count() + 1))
         self.listWidget_session.addItem(new_item)
         self.listWidget_session.setCurrentItem(new_item)
 
@@ -140,16 +143,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.sign_up_dialog.show()
         self.login_dialog.close()
 
-    def new_login_window(self):
+    def new_changepwd_window(self):
+        self.change_pwd_dialog.show()
+        self.login_dialog.close()
+
+    def new_login_window_signup(self):
         self.login_dialog.show()
         self.sign_up_dialog.close()
+
+    def new_login_window_changepwd(self):
+        self.login_dialog.show()
+        self.change_pwd_dialog.close()
 
     def login_end(self):
         username = str(self.login_dialog.user_name)
         # self.current_user = pydb.select_date(username)[0]
         self.label_name.setText(username)
-        # user_avatar = pydb.select_one_date("avatar", "users","username", username)
-        # self.label_icon.setPixmap(user_avatar)
         self.pushButton_logout.setText("退出登录")
         self.login_dialog.close()
 

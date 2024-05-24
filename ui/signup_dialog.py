@@ -18,8 +18,6 @@ class SignupDialog(QDialog, Ui_signup_dialog):
         super().__init__()
         self.setupUi(self)
         self.pushButton_submit.clicked.connect(self.on_submit_button_clicked)
-        with open(r"C:\Users\13677\Desktop\graduation_project\GPTalks\ui\image\user.png", "rb") as f:
-            self.d_avatar = f.read()
 
         # 使用 Python 的 re 模块来构建正则表达式
         pattern = r'^[\w-]{6,10}$'
@@ -38,6 +36,7 @@ class SignupDialog(QDialog, Ui_signup_dialog):
             QMessageBox.warning(self, "错误", "用户名已存在！")
             return
         hashed = hash_password(password)
-        pydb.insert_date(username, hashed, self.d_avatar)
+        pydb.insert_date(username, hashed)
+        pydb.insert_one_date(username)
         QMessageBox.information(self, "成功", "注册成功！")
         self.registration_complete.emit()

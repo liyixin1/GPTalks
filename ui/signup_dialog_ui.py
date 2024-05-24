@@ -12,6 +12,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_signup_dialog(object):
     def setupUi(self, signup_dialog):
         signup_dialog.setObjectName("signup_dialog")
+        signup_dialog.setEnabled(True)
         signup_dialog.resize(400, 300)
         self.horizontalLayout = QtWidgets.QHBoxLayout(signup_dialog)
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -64,7 +65,7 @@ class Ui_signup_dialog(object):
 
     def retranslateUi(self, signup_dialog):
         _translate = QtCore.QCoreApplication.translate
-        signup_dialog.setWindowTitle(_translate("signup_dialog", "Dialog"))
+        signup_dialog.setWindowTitle(_translate("signup_dialog", "注册"))
         self.lineEdit_1.setText(_translate("signup_dialog", "欢迎注册GPTalks"))
         self.lineEdit_2.setText(_translate("signup_dialog", "每一天，乐在沟通。"))
         self.lineEdit_username.setPlaceholderText(_translate("signup_dialog", "用户名"))

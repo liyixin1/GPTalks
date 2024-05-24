@@ -16,36 +16,38 @@ def read_toml_file(file_path):
 event1 = threading.Event()
 
 
-class Openai:
+class AiModel:
     def __init__(self):
         self.thread = threading.Thread(target=self.write_to_config)
         self.thread.start()
-        if not read_toml_file("config.toml")["openai"]["api_key"]:
+        if not read_toml_file("config.toml")["ai_model"]["api_key"]:
             self.api_key = os.getenv("OPENAI_API_KEY")
         else:
-            self.api_key = read_toml_file("config.toml")["openai"]["api_key"]
-        self.model = read_toml_file("config.toml")["openai"]["model"]
-        self.chat_rounds = read_toml_file("config.toml")["openai"]["chat_rounds"]
-        self.max_tokens = read_toml_file("config.toml")["openai"]["max_tokens"]
-        self.chat_prompt = read_toml_file("config.toml")["openai"]["chat_prompt"]
+            self.api_key = read_toml_file("config.toml")["ai_model"]["api_key"]
+        self.ai = read_toml_file("config.toml")["ai_model"]["ai"]
+        self.model = read_toml_file("config.toml")["ai_model"]["model"]
+        self.chat_rounds = read_toml_file("config.toml")["ai_model"]["chat_rounds"]
+        self.max_tokens = read_toml_file("config.toml")["ai_model"]["max_tokens"]
+        self.chat_prompt = read_toml_file("config.toml")["ai_model"]["chat_prompt"]
 
     def write_to_config(self):
         while True:
             event1.wait()
-            print(self.chat_rounds)
             with open('config.toml', 'r', encoding='utf-8') as f:
                 data = tomlkit.parse(f.read())
-            data['openai']['model'] = self.model
-            data['openai']['max_tokens'] = int(self.max_tokens)
-            data['openai']['chat_rounds'] = int(self.chat_rounds)
-            data['openai']['chat_prompt'] = self.chat_prompt
+            data['ai_model']['ai'] = self.ai
+            data['ai_model']['api_key'] = self.api_key
+            data['ai_model']['model'] = self.model
+            data['ai_model']['max_tokens'] = int(self.max_tokens)
+            data['ai_model']['chat_rounds'] = int(self.chat_rounds)
+            data['ai_model']['chat_prompt'] = self.chat_prompt
             # 将修改后的数据写回文件
             with open('config.toml', 'w', encoding='utf-8') as f:
                 f.write(tomlkit.dumps(data))
             print("write_to_config yes")
 
 
-openai = Openai()
+aimodel = AiModel()
 
 
 class Aliyun:
@@ -78,7 +80,7 @@ class DateBase:
     def get_connection(self):
         try:
             conn = mysql.connector.connect(**self.db_config)
-            print("数据库连接成功。")
+            # print("数据库连接成功。")
             return conn
         except mysql.connector.Error as e:
             print("数据库连接失败:", e)

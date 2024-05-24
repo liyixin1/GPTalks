@@ -10,6 +10,7 @@ from ui.login_dialog_ui import Ui_Login_Dialog
 class LoginDialog(QDialog, Ui_Login_Dialog):
     goto_registration = pyqtSignal()
     login_successful = pyqtSignal()
+    goto_changepwd = pyqtSignal()
 
     def __init__(self):
         super().__init__()
@@ -17,8 +18,8 @@ class LoginDialog(QDialog, Ui_Login_Dialog):
         self.user_name = None
         self.pushButton_login.clicked.connect(self.on_login_button_clicked)
         self.pushButton_signup.clicked.connect(self.on_signup_button_clicked)
+        self.pushButton_changepwd.clicked.connect(self.on_changepwd_button_clicked)
 
-        # 使用 Python 的 re 模块来构建正则表达式
         pattern = r'^[\w-]{6,10}$'
         regex = QRegularExpression(pattern)
         validator = QRegularExpressionValidator(regex, self)
@@ -38,7 +39,7 @@ class LoginDialog(QDialog, Ui_Login_Dialog):
         username = self.lineEdit_username.text()
         password = self.lineEdit_password.text()
 
-        if username is None or password is None:
+        if username == "" or password == "":
             QMessageBox.warning(self, "错误", "用户名或密码不能为空！")
             return
         elif pydb.select_one_date("username", "users", "username", username) is None:
@@ -53,3 +54,6 @@ class LoginDialog(QDialog, Ui_Login_Dialog):
 
     def on_signup_button_clicked(self):
         self.goto_registration.emit()
+
+    def on_changepwd_button_clicked(self):
+        self.goto_changepwd.emit()

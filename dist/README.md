@@ -1,1 +1,0 @@
-将你的openai的api_key写到config.toml文件里面对应的位置方可运行。

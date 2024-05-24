@@ -69,6 +69,7 @@ class SpeechRecognition:
         print("test_on_chg:{}".format(message))
         message_json = json.loads(message)
         self.speech_text_chg = message_json['payload']['result']
+        print(message_json['payload']['result'])
 
     def on_completed(self, message, *args):
         print("on_completed:args=>{} message=>{}".format(args, message))
