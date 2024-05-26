@@ -4,7 +4,7 @@ import threading
 
 import tomli
 import tomlkit
-import mysql.connector
+
 
 
 def read_toml_file(file_path):
@@ -67,29 +67,3 @@ class Aliyun:
 aliyun = Aliyun()
 
 
-class DateBase:
-    def __init__(self):
-        # 数据库连接配置
-        self.db_config = {
-            'user': 'root',
-            'password': '88888888',
-            'host': 'localhost',
-            'database': 'gpt_data'
-        }
-
-    def get_connection(self):
-        try:
-            conn = mysql.connector.connect(**self.db_config)
-            # print("数据库连接成功。")
-            return conn
-        except mysql.connector.Error as e:
-            print("数据库连接失败:", e)
-            # 在这里处理连接失败的情况
-
-    def close_connection(self, conn, cursor):
-        if conn is not None:
-            cursor.close()
-            conn.close()
-
-
-database = DateBase()

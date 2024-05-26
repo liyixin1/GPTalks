@@ -59,7 +59,4 @@ class ListWidgetItem(QtWidgets.QListWidgetItem):
                                           'footnotes',
                                           'tables',
                                       ])
-        with open('./css/github-style-gpt.css', 'r',
-                  encoding='utf-8') as css_file:
-            css_content = css_file.read()
-        return f"<style>{css_content}</style>{html_text}"
+        return html_text
