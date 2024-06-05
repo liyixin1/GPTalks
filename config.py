@@ -2,7 +2,6 @@
 config.py
 配置各种接口Key以及其他参数。
 """
-import os
 import threading
 import tomli
 import tomlkit
