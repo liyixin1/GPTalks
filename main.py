@@ -1,11 +1,14 @@
+"""
+main.py
+程序入口
+"""
 import sys
-
 from PyQt6.QtWidgets import QApplication
-
 from ui.main_window import MainWindow
 
 
 def main():
+    """创建主窗口实例"""
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()

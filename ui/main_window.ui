@@ -127,22 +127,6 @@
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_2">
               <item>
-               <widget class="QPushButton" name="pushButton_audio">
-                <property name="text">
-                 <string>语音</string>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-                <property name="checked">
-                 <bool>false</bool>
-                </property>
-                <property name="autoRepeat">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
                <widget class="QPushButton" name="pushButton_commit">
                 <property name="text">
                  <string> 提交</string>

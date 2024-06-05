@@ -1,11 +1,9 @@
-import threading
-import time
-
-import pyaudio
+"""
+main_windows.py
+应用程序的主界面，集成了多种功能，包括处理文本输入、音频输入，以及会话管理等。
+"""
 from PyQt6.QtWidgets import QMainWindow
-
-from list_widget_Item import ListWidgetItem
-from speech_recognition import SpeechRecognition
+from list_widget_item import ListWidgetItem
 from ui.about_dialog import AboutDialog
 from ui.plain_text_edit import MyPlainTextEdit
 from ui.setting_dialog import SettingDialog
@@ -13,6 +11,7 @@ from ui.main_window_ui import Ui_MainWindow
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
+    """主界面类"""
     def __init__(self):
         super().__init__()
         self.sign_up_dialog = None
@@ -30,27 +29,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # -------------------------------------------------------
 
         # 连接信号与槽
-        self.pushButton_commit.clicked.connect(self.on_commit_button_clicked)  # 提交按钮点击信号
-        self.listWidget_session.currentItemChanged.connect(self.on_current_item_changed)  # 鼠标点击会话列表项信号
-        self.pushButton_new.clicked.connect(self.on_new_button_clicked)  # 新建会话按钮点击信号
-        self.pushButton_delect.clicked.connect(self.on_delete_button_clicked)  # 删除会话按钮点击信号
+        self.pushButton_commit.clicked.connect(self.on_commit_button_clicked)
+        self.listWidget_session.currentItemChanged.connect(self.on_current_item_changed)
+        self.pushButton_new.clicked.connect(self.on_new_button_clicked)
+        self.pushButton_delect.clicked.connect(self.on_delete_button_clicked)
         self.lineEdit_name.editingFinished.connect(self.on_session_name_editing_finished)
         self.pushButton_settings.clicked.connect(self.on_setting_button_clicked)
         self.pushButton_about.clicked.connect(self.on_about_button_clicked)
         self.plainTextEdit_input.ctrlEnterPressed.connect(self.on_commit_button_clicked)
-        self.pushButton_audio.toggled.connect(self.on_audio_button_toggled)
-        # -------------------------------------------------------
-
-        # 录音参数设置
-        self.for_mat = pyaudio.paInt16  # 音频格式
-        self.channels = 1  # 单声道
-        self.rate = 16000  # 采样率
-        self.chunk = 1024  # 每次读取的音频流长度
-        self.isSwitchOn = False  # 录音启停标记
         # -------------------------------------------------------
         self.current_model = None
 
     def on_commit_button_clicked(self):
+        """处理提交按钮点击事件，即将输入的文本记录到当前选中的会话中。"""
         if self.listWidget_session.count() == 0:  # 如果当前不存在会话记录，则新建一个
             self.on_new_button_clicked()
         self.textBrowser_show.setText(
@@ -62,65 +53,39 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.plainTextEdit_input.clear()
 
     def on_current_item_changed(self):
+        """当选中的会话项发生变化时，更新相应的会话名称和会话显示。"""
         if self.listWidget_session.currentItem() is None:
             self.lineEdit_name.setText("")
             self.textBrowser_show.setText("")
         else:
             self.lineEdit_name.setText(self.listWidget_session.currentItem().text())
-            self.textBrowser_show.setHtml(self.listWidget_session.currentItem().record_to_display_text())
+            self.textBrowser_show.setHtml(
+                self.listWidget_session.currentItem().record_to_display_text())
 
     def on_new_button_clicked(self):
+        """新建一个会话项，并自动选中这个新会话项。"""
         new_item = ListWidgetItem("对话" + str(self.listWidget_session.count() + 1))
         self.listWidget_session.addItem(new_item)
         self.listWidget_session.setCurrentItem(new_item)
 
     def on_delete_button_clicked(self):
+        """删除当前选中的会话项。"""
         del_item = self.listWidget_session.takeItem(self.listWidget_session.currentRow())
         del del_item
 
     def on_session_name_editing_finished(self):
+        """会话名称编辑完成后，更新当前会话项的显示名称。"""
         if self.listWidget_session.count() != 0:
             self.listWidget_session.currentItem().setText(self.lineEdit_name.text())
 
     def on_setting_button_clicked(self):
+        """显示设置窗口。"""
         self.settings_dialog = SettingDialog()
         self.settings_dialog.show()
 
     def on_about_button_clicked(self):
+        """显示关于窗口"""
         self.about_dialog = AboutDialog()
         self.about_dialog.exec()
 
-    def on_audio_button_toggled(self, is_clicked):
-        if is_clicked:
-            self.isSwitchOn = True
-            self.pushButton_audio.setText("停止")
-            thread = threading.Thread(target=self.start_or_stop_speech_to_text)
-            thread.start()
-        else:
-            self.isSwitchOn = False
-            self.pushButton_audio.setText("语音")
 
-    def start_or_stop_speech_to_text(self):
-        audio = pyaudio.PyAudio()
-        t = SpeechRecognition('user')
-        t.start()
-        # 开始录音
-        stream = audio.open(format=self.for_mat, channels=self.channels,
-                            rate=self.rate, input=True,
-                            frames_per_buffer=self.chunk)
-        print("录音中...")
-        while self.isSwitchOn:
-            data = stream.read(self.chunk)
-            t.send_audio_data(data)  # 发送音频数据片段
-            time.sleep(0.01)
-            if t.speech_text_end != "":
-                self.plainTextEdit_input.insertPlainText(t.speech_text_end)
-                t.speech_text_end = ""
-            # self.plainTextEdit_input.appendPlainText(t.speech_text_chg)
-        print("录音结束")
-        t.sr.stop()
-        self.plainTextEdit_input.insertPlainText(t.speech_text_end)
-        # 停止录音
-        stream.stop_stream()
-        stream.close()
-        audio.terminate()

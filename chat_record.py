@@ -1,13 +1,13 @@
+"""对话记录模块"""
 import logging
 import os
 from datetime import datetime
 
 
 class ChatRecordLog:
+    """聊天记录存储"""
     def __init__(self):
         self.today = datetime.now().date()
-        if not os.path.exists('./chat_record_logs'):
-            os.makedirs('./chat_record_logs')
         self.log_dir = './chat_record_logs/' + str(self.today)
         self.user_log = logging.getLogger("user")
         self.chatgpt_log = logging.getLogger('assistant')
@@ -16,6 +16,7 @@ class ChatRecordLog:
             os.makedirs(self.log_dir)
 
     def save_record_to_log(self, record, item_name):
+        """将对话记录保存到日志文件"""
         log_file = str(datetime.now().date()) + '_' + item_name + '.log'
         log_file_path = os.path.join(self.log_dir, log_file)
         logging.basicConfig(filename=log_file_path,
@@ -31,6 +32,7 @@ class ChatRecordLog:
             self.chatgpt_log.info(record['content'])
 
     def chat_debug(self, record):
+        """?"""
         logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
         self.debug_log.debug(record)
 
