@@ -3,14 +3,14 @@ config.py
 配置各种接口Key以及其他参数。
 """
 import threading
-import tomli
+# import tomli
 import tomlkit
 
 
 def read_toml_file(file_path):
     """读取配置文件"""
     with open(file_path, "rb") as f:  # TOML文件需要以二进制模式打开
-        toml_dict = tomli.load(f)
+        toml_dict = tomlkit.load(f)
     return toml_dict
 
 
@@ -48,5 +48,3 @@ class AiModel:
 
 
 aimodel = AiModel()
-
-

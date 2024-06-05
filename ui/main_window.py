@@ -87,5 +87,3 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """显示关于窗口"""
         self.about_dialog = AboutDialog()
         self.about_dialog.exec()
-
-
