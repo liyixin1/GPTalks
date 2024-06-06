@@ -51,11 +51,12 @@ class AIModel:
 
     def start(self, model, record):
         """入口函数"""
-        match model:
-            case "OpenAI":
-                return self.chat_gpt(record)
-            case "Groq":
-                return self.groq(record)
+        if model == "OpenAI":
+            return self.chat_gpt(record)
+        elif model == "Groq":
+            return self.groq(record)
+        else:
+            return
 
     def limit_to_chat_rounds(self, record) -> list:
         """多轮对话控制器，当超出用户设置的回合数后即触发丢弃一回合对话内容，先进先出。"""
