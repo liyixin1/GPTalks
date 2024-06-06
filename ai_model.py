@@ -53,10 +53,11 @@ class AIModel:
         """入口函数"""
         if model == "OpenAI":
             return self.chat_gpt(record)
-        elif model == "Groq":
+        if model == "Groq":
             return self.groq(record)
         else:
-            return
+            # 处理未知模型的情况
+            pass  # 或者抛出一个异常，或者返回一个默认值等
 
     def limit_to_chat_rounds(self, record) -> list:
         """多轮对话控制器，当超出用户设置的回合数后即触发丢弃一回合对话内容，先进先出。"""
