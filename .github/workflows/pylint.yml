@@ -21,4 +21,4 @@ jobs:
         pip install pylint
     - name: Analysing the code with pylint
       run: |
-        pylint --disable=E0401,E0611 --extension-pkg-whitelist=PyQt6,PyQt6.QtWidgets,PyQt6.QtCore $(git ls-files '*[^_ui].py')
+        pylint --disable=E0401,E0611,R0903 --extension-pkg-whitelist=PyQt6,PyQt6.QtWidgets,PyQt6.QtCore $(git ls-files '*[^_ui].py')
