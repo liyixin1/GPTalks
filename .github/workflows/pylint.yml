@@ -21,4 +21,4 @@ jobs:
         pip install pylint
     - name: Analysing the code with pylint
       run: |
-        pylint --extension-pkg-whitelist=PyQt6 $(git ls-files '*[^_ui].py')
+        pylint --extension-pkg-whitelist=pyqt6 $(git ls-files '*[^_ui].py')
