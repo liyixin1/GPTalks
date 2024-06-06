@@ -14,6 +14,7 @@ class MyPlainTextEdit(QPlainTextEdit):
     def __init__(self, parent=None):
         super().__init__(parent)
 
+    # pylint: disable=invalid-name
     def keyPressEvent(self, event):
         """处理键盘信号"""
         # 检测是否同时按下了Ctrl和Enter键

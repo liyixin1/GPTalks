@@ -16,7 +16,7 @@ class ListWidgetItem(QtWidgets.QListWidgetItem):
         self.record = [
             {
                 "role": "system",
-                "content": aimodel.chat_prompt
+                "content": aimodel.config["chat_prompt"]
             }
         ]
 
@@ -32,7 +32,7 @@ class ListWidgetItem(QtWidgets.QListWidgetItem):
 
         # 尝试生成AI回复
         try:
-            chatgpt_reply = aimodel.start(aimodel.ai, self.record)
+            chatgpt_reply = aimodel.start(aimodel.config["ai"], self.record)
             print(chatgpt_reply)
             # 检查回复中是否有错误信息
             if 'error' in chatgpt_reply:
@@ -41,7 +41,7 @@ class ListWidgetItem(QtWidgets.QListWidgetItem):
             self.record.append(chatgpt_reply)
             chat_record_log.save_record_to_log(self.record[-1], item_name)
             return self.record_to_display_text()
-        except Exception as e:
+        except TypeError as e:
             messagebox.showwarning("警告", f"出现错误，请检查配置: {str(e)}")
             # 恢复记录状态
             self.record.pop()

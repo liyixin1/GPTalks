@@ -207,7 +207,7 @@
             <widget class="QLineEdit" name="lineEdit_rounds">
              <property name="maximumSize">
               <size>
-               <width>30</width>
+               <width>40</width>
                <height>16777215</height>
               </size>
              </property>
@@ -216,6 +216,9 @@
              </property>
              <property name="text">
               <string/>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
@@ -335,7 +338,4 @@
    </hints>
   </connection>
  </connections>
- <buttongroups>
-  <buttongroup name="buttonGroup_sex"/>
- </buttongroups>
 </ui>

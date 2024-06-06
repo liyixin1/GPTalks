@@ -22,12 +22,18 @@ class AiModel:
     def __init__(self):
         self.thread = threading.Thread(target=self.write_to_config)
         self.thread.start()
-        self.api_key = read_toml_file("config.toml")["ai_model"]["api_key"]
-        self.ai = read_toml_file("config.toml")["ai_model"]["ai"]
-        self.model = read_toml_file("config.toml")["ai_model"]["model"]
-        self.chat_rounds = read_toml_file("config.toml")["ai_model"]["chat_rounds"]
-        self.max_tokens = read_toml_file("config.toml")["ai_model"]["max_tokens"]
-        self.chat_prompt = read_toml_file("config.toml")["ai_model"]["chat_prompt"]
+        self.api_key = self.read_toml_file("config.toml")["ai_model"]["api_key"]
+        self.ai = self.read_toml_file("config.toml")["ai_model"]["ai"]
+        self.model = self.read_toml_file("config.toml")["ai_model"]["model"]
+        self.chat_rounds = self.read_toml_file("config.toml")["ai_model"]["chat_rounds"]
+        self.max_tokens = self.read_toml_file("config.toml")["ai_model"]["max_tokens"]
+        self.chat_prompt = self.read_toml_file("config.toml")["ai_model"]["chat_prompt"]
+
+    def read_toml_file(self, file_path):
+        """读取配置文件"""
+        with open(file_path, "rb") as f:  # TOML文件需要以二进制模式打开
+            toml_dict = tomlkit.load(f)
+        return toml_dict
 
     def write_to_config(self):
         """当识别到用户通过GUI修改参数时，自动同步写入配置文件config.toml"""
