@@ -55,6 +55,7 @@ class AIModel:
             return self.chat_gpt(record)
         if model == "Groq":
             return self.groq(record)
+        return ValueError(f"Unsupported model: {model}")
 
     def limit_to_chat_rounds(self, record) -> list:
         """多轮对话控制器，当超出用户设置的回合数后即触发丢弃一回合对话内容，先进先出。"""
