@@ -47,7 +47,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.textBrowser_show.setText(
             self.listWidget_session.currentItem().get_record(
                 self.plainTextEdit_input.toPlainText(),
-                self.listWidget_session.currentItem().text()
+                self.listWidget_session.currentItem().text(),
+                self,
             )
         )
         self.plainTextEdit_input.clear()

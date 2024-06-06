@@ -2,7 +2,6 @@
 list_widget_item.py
 处理聊天记录并与用户互动。
 """
-from tkinter import messagebox
 import markdown
 from PyQt6 import QtWidgets
 from ai_model import aimodel
@@ -20,7 +19,7 @@ class ListWidgetItem(QtWidgets.QListWidgetItem):
             }
         ]
 
-    def get_record(self, user_input, item_name) -> str:
+    def get_record(self, user_input, item_name, perent) -> str:
         """处理用户输入，调用AI模型生成回复，并将聊天记录保存及展示。"""
         if not user_input:
             return self.record_to_display_text()
@@ -42,7 +41,7 @@ class ListWidgetItem(QtWidgets.QListWidgetItem):
             chat_record_log.save_record_to_log(self.record[-1], item_name)
             return self.record_to_display_text()
         except TypeError as e:
-            messagebox.showwarning("警告", f"出现错误，请检查配置: {str(e)}")
+            QtWidgets.QMessageBox.warning(perent, "警告", f"出现错误，请检查配置: {str(e)}")
             # 恢复记录状态
             self.record.pop()
             self.record.pop()
