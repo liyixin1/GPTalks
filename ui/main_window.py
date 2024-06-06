@@ -19,7 +19,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.about_dialog = None
         self.setupUi(self)
         self.horizontalLayout_4.removeWidget(self.plainTextEdit_input)
-        self.plainTextEdit_input = MyPlainTextEdit(parent=self.layoutWidget_4)
+        self.plainTextEdit_input = MyPlainTextEdit()
         self.plainTextEdit_input.setObjectName("plainTextEdit_input")
 
         # 通过remove将按钮拿出来，先添加输入框再添加按钮，使其相对位置不变

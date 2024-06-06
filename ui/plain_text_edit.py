@@ -11,9 +11,6 @@ class MyPlainTextEdit(QPlainTextEdit):
     """定义send为ctrl+enter,定义enter为换行"""
     ctrlEnterPressed = pyqtSignal()
 
-    def __init__(self, parent=None):
-        super().__init__(parent)
-
     # pylint: disable=invalid-name
     def keyPressEvent(self, event):
         """处理键盘信号"""
