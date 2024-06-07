@@ -21,6 +21,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.horizontalLayout_4.removeWidget(self.plainTextEdit_input)
         self.plainTextEdit_input = MyPlainTextEdit()
         self.plainTextEdit_input.setObjectName("plainTextEdit_input")
+        # QTextBrowser启用超链接
+        self.textBrowser_show.setOpenExternalLinks(True)
 
         # 通过remove将按钮拿出来，先添加输入框再添加按钮，使其相对位置不变
         self.horizontalLayout_4.removeItem(self.verticalLayout_2)
