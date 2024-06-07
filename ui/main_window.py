@@ -2,12 +2,20 @@
 main_windows.py
 应用程序的主界面，集成了多种功能，包括处理文本输入、音频输入，以及会话管理等。
 """
+from concurrent.futures import ThreadPoolExecutor
+from PyQt6.QtCore import QObject, pyqtSignal
 from PyQt6.QtWidgets import QMainWindow
 from list_widget_item import ListWidgetItem
 from ui.about_dialog import AboutDialog
 from ui.plain_text_edit import MyPlainTextEdit
 from ui.setting_dialog import SettingDialog
 from ui.main_window_ui import Ui_MainWindow
+
+
+class Communicate(QObject):
+    """定义信号"""
+    text_ready = pyqtSignal(str)
+    input_clear = pyqtSignal()
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -18,11 +26,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.settings_dialog = None
         self.about_dialog = None
         self.setupUi(self)
+
+        # 初始化线程池
+        self.executor = ThreadPoolExecutor(max_workers=1)
+
+        # QTextBrowser启用超链接
+        self.textBrowser_show.setOpenExternalLinks(True)
+
         self.horizontalLayout_4.removeWidget(self.plainTextEdit_input)
         self.plainTextEdit_input = MyPlainTextEdit()
         self.plainTextEdit_input.setObjectName("plainTextEdit_input")
-        # QTextBrowser启用超链接
-        self.textBrowser_show.setOpenExternalLinks(True)
 
         # 通过remove将按钮拿出来，先添加输入框再添加按钮，使其相对位置不变
         self.horizontalLayout_4.removeItem(self.verticalLayout_2)
@@ -42,17 +55,33 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # -------------------------------------------------------
         self.current_model = None
 
+        # 用于线程安全GUI更新的通信对象
+        self.communicate = Communicate()
+        self.communicate.text_ready.connect(self.update_text_browser)
+        self.communicate.input_clear.connect(self.clear_input)
+
     def on_commit_button_clicked(self):
         """处理提交按钮点击事件，即将输入的文本记录到当前选中的会话中。"""
+        self.executor.submit(self._commit_button_clicked_task)
+
+    def _commit_button_clicked_task(self):
+        """单击提交按钮时运行的实际任务。"""
         if self.listWidget_session.count() == 0:  # 如果当前不存在会话记录，则新建一个
             self.on_new_button_clicked()
-        self.textBrowser_show.setText(
-            self.listWidget_session.currentItem().get_record(
-                self.plainTextEdit_input.toPlainText(),
-                self.listWidget_session.currentItem().text(),
-                self,
-            )
+
+        text = self.listWidget_session.currentItem().get_record(
+            self.plainTextEdit_input.toPlainText(),
+            self.listWidget_session.currentItem().text(),
+            self,
         )
+        self.communicate.text_ready.emit(text)
+        self.plainTextEdit_input.clear()
+
+    def update_text_browser(self, text):
+        """用新的文本更新QTextBrowser。"""
+        # self.textBrowser_show.setText(text)
+    def clear_input(self):
+        """Clear the input field."""
         self.plainTextEdit_input.clear()
 
     def on_current_item_changed(self):
