@@ -20,6 +20,9 @@
   <property name="styleSheet">
    <string notr="true">font: 12pt &quot;Microsoft YaHei UI&quot;;</string>
   </property>
+  <property name="documentMode">
+   <bool>false</bool>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -106,13 +109,19 @@
            <property name="font">
             <font>
              <family>Segoe UI Emoji</family>
-             <pointsize>9</pointsize>
+             <pointsize>12</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
            </property>
            <property name="styleSheet">
-            <string notr="true">font: 9pt &quot;Segoe UI Emoji&quot;;</string>
+            <string notr="true">font: 12pt &quot;Segoe UI Emoji&quot;;</string>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+           <property name="openExternalLinks">
+            <bool>true</bool>
            </property>
           </widget>
           <widget class="QWidget" name="layoutWidget_4">
@@ -127,13 +136,13 @@
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_2">
               <item>
-               <widget class="QPushButton" name="pushButton_commit">
+               <widget class="QPushButton" name="pushButton_send">
                 <property name="text">
-                 <string> 提交</string>
+                 <string>发送</string>
                 </property>
                 <property name="icon">
                  <iconset>
-                  <normaloff>image/commit.svg</normaloff>image/commit.svg</iconset>
+                  <normaloff>image/send.svg</normaloff>image/send.svg</iconset>
                 </property>
                </widget>
               </item>

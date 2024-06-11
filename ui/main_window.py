@@ -14,7 +14,7 @@ from ui.main_window_ui import Ui_MainWindow
 
 class Communicate(QObject):
     """定义信号"""
-    text_ready = pyqtSignal(str)
+    text_ready = pyqtSignal(tuple)
     input_clear = pyqtSignal()
 
 
@@ -22,16 +22,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     """主界面类"""
     def __init__(self):
         super().__init__()
-        self.sign_up_dialog = None
         self.settings_dialog = None
         self.about_dialog = None
         self.setupUi(self)
-
-        # 初始化线程池
-        self.executor = ThreadPoolExecutor(max_workers=1)
-
-        # QTextBrowser启用超链接
-        self.textBrowser_show.setOpenExternalLinks(True)
 
         self.horizontalLayout_4.removeWidget(self.plainTextEdit_input)
         self.plainTextEdit_input = MyPlainTextEdit()
@@ -44,14 +37,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # -------------------------------------------------------
 
         # 连接信号与槽
-        self.pushButton_commit.clicked.connect(self.on_commit_button_clicked)
+        self.pushButton_send.clicked.connect(self.on_send_button_clicked)
         self.listWidget_session.currentItemChanged.connect(self.on_current_item_changed)
         self.pushButton_new.clicked.connect(self.on_new_button_clicked)
         self.pushButton_delect.clicked.connect(self.on_delete_button_clicked)
         self.lineEdit_name.editingFinished.connect(self.on_session_name_editing_finished)
         self.pushButton_settings.clicked.connect(self.on_setting_button_clicked)
         self.pushButton_about.clicked.connect(self.on_about_button_clicked)
-        self.plainTextEdit_input.ctrlEnterPressed.connect(self.on_commit_button_clicked)
+        self.plainTextEdit_input.ctrlEnterPressed.connect(self.on_send_button_clicked)
         # -------------------------------------------------------
         self.current_model = None
 
@@ -60,35 +53,45 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.communicate.text_ready.connect(self.update_text_browser)
         self.communicate.input_clear.connect(self.clear_input)
 
-    def on_commit_button_clicked(self):
-        """处理提交按钮点击事件，即将输入的文本记录到当前选中的会话中。"""
-        self.executor.submit(self._commit_button_clicked_task)
-
-    def _commit_button_clicked_task(self):
-        """单击提交按钮时运行的实际任务。"""
+    # 发送按钮处理模块--------------------------------------------------↓
+    def on_send_button_clicked(self):
+        """处理发送按钮点击事件，即将输入的文本记录到当前选中的会话中。"""
+        executor = ThreadPoolExecutor(max_workers=1)
+        self.pushButton_delect.setEnabled(False)
+        current_item = self.listWidget_session.currentItem()
         if self.listWidget_session.count() == 0:  # 如果当前不存在会话记录，则新建一个
             self.on_new_button_clicked()
+            current_item = self.listWidget_session.currentItem()    # 捕获当前对话项
+        executor.submit(self._commit_button_clicked_task, current_item)
 
+    def _commit_button_clicked_task(self, current_item):
+        """单击提交按钮时运行的实际任务。"""
+        input_text = self.plainTextEdit_input.toPlainText()
+        self.communicate.input_clear.emit()
         text = self.listWidget_session.currentItem().get_record(
-            self.plainTextEdit_input.toPlainText(),
+            input_text,
             self.listWidget_session.currentItem().text(),
             self,
         )
-        self.communicate.text_ready.emit(text)
-        self.plainTextEdit_input.clear()
+        self.communicate.text_ready.emit((current_item, text))
 
-    def update_text_browser(self, text):
+    def update_text_browser(self, item_text_pair):
         """用新的文本更新QTextBrowser。"""
-        # self.textBrowser_show.setText(text)
+        item, text = item_text_pair
+        if self.listWidget_session.currentItem() == item:
+            self.textBrowser_show.setHtml(text)
+        self.pushButton_delect.setEnabled(True)
+
     def clear_input(self):
-        """Clear the input field."""
+        """清除输入框内容"""
         self.plainTextEdit_input.clear()
+    # 发送按钮处理模块--------------------------------------------------↑
 
     def on_current_item_changed(self):
-        """当选中的会话项发生变化时，更新相应的会话名称和会话显示。"""
+        """当选中的对话项发生变化时，更新相应的对话名称和对话显示。"""
         if self.listWidget_session.currentItem() is None:
             self.lineEdit_name.setText("")
-            self.textBrowser_show.setText("")
+            self.textBrowser_show.setHtml("")
         else:
             self.lineEdit_name.setText(self.listWidget_session.currentItem().text())
             self.textBrowser_show.setHtml(
