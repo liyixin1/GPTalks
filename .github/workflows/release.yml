@@ -1,6 +1,5 @@
 on:
   push:
-    # Sequence of patterns matched against refs/tags
     tags:
     - 'V*' # Push events to matching V*, i.e. V1.0, V20.15.10
 
@@ -8,26 +7,50 @@ name: Create Release
 
 jobs:
   build:
-    runs-on: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            artifact_name: "GPTalks-ubuntu.zip"
+          - os: windows-latest
+            artifact_name: "GPTalks-windows.zip"
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          pip install -r requirements.txt
           pip install pyinstaller
-      - name: Build
+
+      - name: Build (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
         run: |
-          pyinstaller --onefile --windowed main.py -n GPTalks.exe
-          cp config.toml dist/
-          cp ai_model.json dist/
-          cp LICENSE dist/
-          cd dist/
-          zip GPTalks.zip ./*
+          mkdir GPTalks
+          pyinstaller --onefile --windowed main.py --distpath GPTalks -n GPTalks
+          cp config.toml GPTalks/
+          cp ai_model.json GPTalks/
+          cp LICENSE GPTalks/
+          zip -r ${{ matrix.artifact_name }} GPTalks
+
+      - name: Build (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          mkdir GPTalks
+          pyinstaller --onefile --windowed main.py  --distpath GPTalks --name GPTalks.exe
+          Copy-Item config.toml, ai_model.json, LICENSE -Destination GPTalks\
+          Write-Host ${{ matrix.artifact_name }}
+          Compress-Archive -Path GPTalks\* -DestinationPath ${{ matrix.artifact_name }}
+        shell: powershell
+
       - name: Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
           generate_release_notes: true
           files: |
-            dist/GPTalks.zip
+            ${{ matrix.artifact_name }}
