@@ -1,8 +1,7 @@
 [ai_model]
-ai = "Groq"
+ai = "OpenAI"
 api_key = ""
-chat_rounds = 30
-model = "llama3-70b-8192"
+chat_rounds = 20
+model = "gpt-4o"
 max_tokens = 4096
-chat_prompt = "请中文回复我。如果发现我的语句不通顺，先显示纠正，再根据纠正后的语句回答。在回答我的时候尽量使用emoji，尽可能使用更加人性化的语气。"
-
+chat_prompt = "请中文回复我。如果发现我的语句不通顺，先显式纠正，再根据纠正后的语句回答。在回答我的时候尽量使用emoji，尽可能使用更加人性化的语气。"

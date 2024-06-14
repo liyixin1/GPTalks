@@ -71,17 +71,14 @@ class AIModel:
             "messages": self.limit_to_chat_rounds(record),
             "max_tokens": self.config["max_tokens"]
         })
-
-        # print("payload")
-        # print(payload)
         response = requests.request("POST",
                                     OPENAI_URL,
                                     headers=self.openai_headers,
                                     data=payload,
-                                    timeout=5)
+                                    timeout=100,
+                                    )
         response_json = response.json()
         # 从响应中获取并返回所需的文本
-        print(response_json)
         return response_json.get("choices", [{}])[0].get("message", [])
 
     # Llama模式
@@ -99,9 +96,27 @@ class AIModel:
         response = {'role': 'assistant', 'content': chat_completion.choices[0].message.content}
         return response
 
-    def user_input_to_record_item(self, user_input):
-        """处理用户输入内容格式"""
-        return {"role": "user", "content": user_input}
+    def user_input_image_to_record_item(self, user_input, user_image=None):
+        """处理用户输入的文字和可能存在的图片"""
+        messages = [
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": user_input
+                    }
+                ]
+            }
+        ]
+        if user_image:
+            messages[0]["content"].append({
+                "type": "image_url",
+                "image_url": {
+                    "url": f"data:image/jpeg;base64,{user_image}"
+                }
+            })
+        return messages[0]
 
 
 aimodel = AIModel()

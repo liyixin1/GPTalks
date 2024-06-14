@@ -2,9 +2,11 @@
 main_windows.py
 应用程序的主界面，集成了多种功能，包括处理文本输入、音频输入，以及会话管理等。
 """
+import base64
 from concurrent.futures import ThreadPoolExecutor
-from PyQt6.QtCore import QObject, pyqtSignal
-from PyQt6.QtWidgets import QMainWindow
+from PyQt6.QtCore import QObject, pyqtSignal, Qt, QEvent, QBuffer, QIODevice
+from PyQt6.QtGui import QPixmap, QImage
+from PyQt6.QtWidgets import QMainWindow, QFileDialog
 from list_widget_item import ListWidgetItem
 from ui.about_dialog import AboutDialog
 from ui.plain_text_edit import MyPlainTextEdit
@@ -20,6 +22,7 @@ class Communicate(QObject):
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     """主界面类"""
+
     def __init__(self):
         super().__init__()
         self.settings_dialog = None
@@ -45,13 +48,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_settings.clicked.connect(self.on_setting_button_clicked)
         self.pushButton_about.clicked.connect(self.on_about_button_clicked)
         self.plainTextEdit_input.ctrlEnterPressed.connect(self.on_send_button_clicked)
+        self.pushButton_upload.clicked.connect(self.on_upload_button_clicked)
         # -------------------------------------------------------
-        self.current_model = None
+        self.base64_image = None
 
         # 用于线程安全GUI更新的通信对象
         self.communicate = Communicate()
         self.communicate.text_ready.connect(self.update_text_browser)
         self.communicate.input_clear.connect(self.clear_input)
+
+        self.label_image.installEventFilter(self)  # 安装事件过滤器
 
     # 发送按钮处理模块--------------------------------------------------↓
     def on_send_button_clicked(self):
@@ -61,7 +67,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         current_item = self.listWidget_session.currentItem()
         if self.listWidget_session.count() == 0:  # 如果当前不存在会话记录，则新建一个
             self.on_new_button_clicked()
-            current_item = self.listWidget_session.currentItem()    # 捕获当前对话项
+            current_item = self.listWidget_session.currentItem()  # 捕获当前对话项
         executor.submit(self._commit_button_clicked_task, current_item)
 
     def _commit_button_clicked_task(self, current_item):
@@ -70,10 +76,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.communicate.input_clear.emit()
         text = self.listWidget_session.currentItem().get_record(
             input_text,
+            self.base64_image,
             self.listWidget_session.currentItem().text(),
             self,
         )
         self.communicate.text_ready.emit((current_item, text))
+        self.base64_image = None
 
     def update_text_browser(self, item_text_pair):
         """用新的文本更新QTextBrowser。"""
@@ -85,6 +93,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def clear_input(self):
         """清除输入框内容"""
         self.plainTextEdit_input.clear()
+        self.label_image.clear()
+
     # 发送按钮处理模块--------------------------------------------------↑
 
     def on_current_item_changed(self):
@@ -122,3 +132,43 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """显示关于窗口"""
         self.about_dialog = AboutDialog()
         self.about_dialog.exec()
+
+    def on_upload_button_clicked(self):
+        """选取本地图片"""
+        current_model = ListWidgetItem.get_current_model(self.listWidget_session.currentItem())
+        if current_model in ('gpt-4-turbo', 'gpt-4o'):
+            self.pushButton_upload.setToolTip("支持上传1张图片\n最大20MB")
+            file_dialog = QFileDialog()
+            file_path, _ = file_dialog.getOpenFileName(self, "选择图片", "",
+                                                       "图像文件 (*.png *.jpg *.jpeg *.bmp *.gif)")
+
+            if file_path:
+                # 加载并显示图片
+                pixmap = QPixmap(file_path)
+                self.label_image.setPixmap(pixmap)
+                self.label_image.setScaledContents(True)  # 让图片适应标签大小
+
+                # 加载图片
+                image = QImage(file_path)
+                # 创建缓冲区并保存图片数据
+                buffer = QBuffer()
+                # 打开缓冲区，准备写入
+                buffer.open(QIODevice.OpenModeFlag.WriteOnly | QIODevice.OpenModeFlag.Truncate)
+                # 保存图片为 JPEG 格式到缓冲区
+                if image.save(buffer, "JPEG"):
+                    # 获取 base64 编码的图片数据
+                    self.base64_image = base64.b64encode(buffer.data()).decode('utf-8')
+                # 关闭缓冲区
+                buffer.close()
+        else:
+            self.pushButton_upload.setToolTip("当前模型不支持上传图片！")
+
+    # pylint: disable=invalid-name
+    def eventFilter(self, obj, event):
+        """定义点击label事件，点中Label对象即删除其中图片"""
+        if obj == self.label_image:
+            if event.type() == QEvent.Type.MouseButtonPress:
+                if event.button() == Qt.MouseButton.LeftButton:
+                    self.label_image.setPixmap(QPixmap())  # 清除图片
+                    return True  # 事件已被处理，不再传递
+        return super().eventFilter(obj, event)
