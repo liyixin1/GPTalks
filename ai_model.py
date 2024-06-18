@@ -2,10 +2,7 @@
 import json
 import threading
 import requests
-from groq import Groq
 import config
-
-OPENAI_URL = "https://api.openai.com/v1/chat/completions"
 
 
 class AIModel:
@@ -20,16 +17,18 @@ class AIModel:
             "model": config.aimodel.model,
             "chat_rounds": config.aimodel.chat_rounds,
             "max_tokens": config.aimodel.max_tokens,
-            "chat_prompt": config.aimodel.chat_prompt
+            "chat_prompt": config.aimodel.chat_prompt,
         }
 
-        self.openai_headers = {
+        self.headers = {
             'Accept': 'application/json',
             'Authorization': 'Bearer ' + self.config["api_key"],
-            'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',
             'Content-Type': 'application/json'
         }
-        self.grop_client = Groq(api_key=self.config["api_key"])
+        self.url = {
+            'OpenAI': "https://api.openai.com/v1/chat/completions",
+            'Groq': "https://api.groq.com/openai/v1/chat/completions",
+        }
 
     def set_ai_parameter(self):
         """线程无限等待，直到检测到用户更改设置信号的出现"""
@@ -37,64 +36,53 @@ class AIModel:
             config.event1.wait()
             self.config["ai"] = config.aimodel.ai
             self.config["api_key"] = config.aimodel.api_key
-            self.openai_headers = {
+            self.headers = {
                 'Accept': 'application/json',
                 'Authorization': 'Bearer ' + self.config["api_key"],
                 'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',
                 'Content-Type': 'application/json'
             }
-            self.grop_client = Groq(api_key=self.config["api_key"])
             self.config["model"] = config.aimodel.model
             self.config["chat_rounds"] = config.aimodel.chat_rounds
             self.config["max_tokens"] = config.aimodel.max_tokens
             self.config["chat_prompt"] = config.aimodel.chat_prompt
 
-    def start(self, model, record):
+    def start(self, record):
         """入口函数"""
-        if model == "OpenAI":
-            return self.chat_gpt(record)
-        if model == "Groq":
-            return self.groq(record)
-        return ValueError(f"Unsupported model: {model}")
+        try:
+            # 获取AI响应
+            return self.get_ai_response(self.config["ai"], record)
+        except requests.exceptions.RequestException as e:
+            # 处理网络请求异常，如连接错误、超时等
+            print(f"Network request failed: {e}")
+            return None
+        except (ValueError, TypeError) as e:
+            # 处理可能的JSON解析错误或其他值错误
+            print(f"JSON parsing or type error occurred: {e}")
+            return None
 
-    def limit_to_chat_rounds(self, record) -> list:
-        """多轮对话控制器，当超出用户设置的回合数后即触发丢弃一回合对话内容，先进先出。"""
-        if (len(record)) > self.config["chat_rounds"] * 2:
-            # +2绕开chatGPT内容中的system内容
-            return record[(len(record)) - self.config["chat_rounds"] * 2 + 2:]
-        return record
-
-    def chat_gpt(self, record) -> list:
-        """GPT模式"""
+    def get_ai_response(self, model, record):
+        """通过POST请求向指定的AI模型发送数据，并接收响应"""
         payload = json.dumps({
             "model": self.config["model"],
             "messages": self.limit_to_chat_rounds(record),
             "max_tokens": self.config["max_tokens"]
         })
         response = requests.request("POST",
-                                    OPENAI_URL,
-                                    headers=self.openai_headers,
+                                    self.url[model],
+                                    headers=self.headers,
                                     data=payload,
                                     timeout=100,
                                     )
         response_json = response.json()
-        # 从响应中获取并返回所需的文本
-        return response_json.get("choices", [{}])[0].get("message", [])
+        return response_json["choices"][0].get("message", [])
 
-    # Llama模式
-    def groq(self, record) -> dict[str, str]:
-        """# Llama模式"""
-        chat_completion = self.grop_client.chat.completions.create(
-            messages=record,
-            model=self.config["model"],
-            temperature=0.5,
-            max_tokens=self.config["max_tokens"],
-            top_p=1,
-            stop=None,
-            stream=False,
-        )
-        response = {'role': 'assistant', 'content': chat_completion.choices[0].message.content}
-        return response
+    def limit_to_chat_rounds(self, record) -> list:
+        """多轮对话控制器，当超出用户设置的回合数后即触发丢弃一回合对话内容，先进先出。"""
+        if (len(record)) > self.config["chat_rounds"] * 2:
+            # +2绕开内容中的system内容
+            return record[(len(record)) - self.config["chat_rounds"] * 2 + 2:]
+        return record
 
     def user_input_image_to_record_item(self, user_input, user_image=None):
         """处理用户输入的文字和可能存在的图片"""

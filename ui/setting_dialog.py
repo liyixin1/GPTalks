@@ -13,19 +13,28 @@ with open('./ai_model.json', "r", encoding='utf-8') as f:
 
 class SettingDialog(QDialog, Ui_settings_dialog):
     """继承GUI类，初始化界面并加载配置"""
+
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.add_to_combobox_ai()
 
         self.lineEdit_key.setText(config.aimodel.api_key)
+        # max tokens
         self.lineEdit_tokens.setText(str(config.aimodel.max_tokens))
+        self.horizontalSlider_tokens.setValue(config.aimodel.max_tokens)
+        # 上下文记忆数
         self.lineEdit_rounds.setText(str(config.aimodel.chat_rounds))
         self.horizontalSlider_rounds.setValue(config.aimodel.chat_rounds)
+
         self.plainTextEdit_prompt.setPlainText(config.aimodel.chat_prompt)
         # 信号槽连接
         self.lineEdit_rounds.textChanged.connect(self.on_rounds_edit_changed)
         self.horizontalSlider_rounds.valueChanged.connect(self.on_rounds_slider_changed)
+
+        self.lineEdit_tokens.textChanged.connect(self.on_tokens_edit_changed)
+        self.horizontalSlider_tokens.valueChanged.connect(self.on_tokens_slider_changed)
+
         self.comboBox_AI.currentIndexChanged.connect(self.on_ai_combobox_changed)
 
         self.comboBox_AI.setCurrentText(config.aimodel.ai)
@@ -54,6 +63,15 @@ class SettingDialog(QDialog, Ui_settings_dialog):
     def on_rounds_slider_changed(self):
         """连续对话回合数滑块变动信号对应槽，当滑块滑动时，数字同步变化"""
         self.lineEdit_rounds.setText(str(self.horizontalSlider_rounds.value()))
+
+    def on_tokens_edit_changed(self):
+        """最大tokens数改变信号对应槽，当数值修改时，滑块同步变动"""
+        if self.lineEdit_tokens.text() != '':
+            self.horizontalSlider_tokens.setValue(int(self.lineEdit_tokens.text()))
+
+    def on_tokens_slider_changed(self):
+        """最大tokens滑块变动信号对应槽，当滑块滑动时，数字同步变化"""
+        self.lineEdit_tokens.setText(str(self.horizontalSlider_tokens.value()))
 
     def add_to_combobox_ai(self):
         """初始化时加载展示模型"""

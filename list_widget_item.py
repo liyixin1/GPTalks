@@ -32,13 +32,13 @@ class ListWidgetItem(QtWidgets.QListWidgetItem):
 
         # 尝试生成AI回复
         try:
-            chatgpt_reply = aimodel.start(aimodel.config["ai"], self.record)
-            print(chatgpt_reply)
+            chat_reply = aimodel.start(self.record)
+            print(chat_reply)
             # 检查回复中是否有错误信息
-            if 'error' in chatgpt_reply:
-                raise ValueError(f"API Error: {chatgpt_reply['error']['message']}")
+            if 'error' in chat_reply:
+                raise ValueError(f"API Error: {chat_reply['error']['message']}")
             # 保存AI回复至记录中
-            self.record.append(chatgpt_reply)
+            self.record.append(chat_reply)
             chat_record_log.save_record_to_log(self.record[-1], item_name)
             return self.record_to_display_text()
         except TypeError as e:

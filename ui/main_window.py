@@ -28,6 +28,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.settings_dialog = None
         self.about_dialog = None
         self.setupUi(self)
+        self.base64_image = None
 
         self.horizontalLayout_4.removeWidget(self.plainTextEdit_input)
         self.plainTextEdit_input = MyPlainTextEdit()
@@ -37,7 +38,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.horizontalLayout_4.removeItem(self.verticalLayout_2)
         self.horizontalLayout_4.addWidget(self.plainTextEdit_input)
         self.horizontalLayout_4.addItem(self.verticalLayout_2)
-        # -------------------------------------------------------
 
         # 连接信号与槽
         self.pushButton_send.clicked.connect(self.on_send_button_clicked)
@@ -49,15 +49,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_about.clicked.connect(self.on_about_button_clicked)
         self.plainTextEdit_input.ctrlEnterPressed.connect(self.on_send_button_clicked)
         self.pushButton_upload.clicked.connect(self.on_upload_button_clicked)
-        # -------------------------------------------------------
-        self.base64_image = None
 
-        # 用于线程安全GUI更新的通信对象
+        # 创建信号类对象
         self.communicate = Communicate()
+        # 用于线程安全GUI更新的通信
         self.communicate.text_ready.connect(self.update_text_browser)
         self.communicate.input_clear.connect(self.clear_input)
-
-        self.label_image.installEventFilter(self)  # 安装事件过滤器
+        # 安装事件过滤器
+        self.label_image.installEventFilter(self)
 
     # 发送按钮处理模块--------------------------------------------------↓
     def on_send_button_clicked(self):

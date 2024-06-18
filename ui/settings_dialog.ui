@@ -65,22 +65,6 @@
           </widget>
          </item>
          <item>
-          <widget class="Line" name="line">
-           <property name="frameShadow">
-            <enum>QFrame::Sunken</enum>
-           </property>
-           <property name="lineWidth">
-            <number>30</number>
-           </property>
-           <property name="midLineWidth">
-            <number>2</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
           <layout class="QVBoxLayout" name="verticalLayout_5">
            <item>
             <widget class="QLineEdit" name="lineEdit_api_key_title">
@@ -114,6 +98,22 @@
           </layout>
          </item>
          <item>
+          <widget class="Line" name="line">
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+           <property name="lineWidth">
+            <number>30</number>
+           </property>
+           <property name="midLineWidth">
+            <number>2</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
           <layout class="QVBoxLayout" name="verticalLayout_6">
            <item>
             <widget class="QLineEdit" name="lineEdit_model_title">
@@ -144,17 +144,32 @@
           </layout>
          </item>
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout_7">
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
             <widget class="QLineEdit" name="lineEdit_maxtokens_title">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>16777215</height>
+              </size>
+             </property>
              <property name="styleSheet">
               <string notr="true">background-color: transparent;</string>
              </property>
              <property name="text">
-              <string>最大tokens</string>
+              <string>最大tokens：</string>
              </property>
              <property name="frame">
               <bool>false</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
              <property name="readOnly">
               <bool>true</bool>
@@ -163,11 +178,36 @@
            </item>
            <item>
             <widget class="QLineEdit" name="lineEdit_tokens">
+             <property name="maximumSize">
+              <size>
+               <width>80</width>
+               <height>16777215</height>
+              </size>
+             </property>
              <property name="styleSheet">
               <string notr="true">font: 12pt &quot;Microsoft YaHei UI&quot;;</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
              <property name="placeholderText">
-              <string>Max Tokens</string>
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="horizontalSlider_tokens">
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>128000</number>
+             </property>
+             <property name="pageStep">
+              <number>128</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
              </property>
             </widget>
            </item>
@@ -179,7 +219,7 @@
             <widget class="QLineEdit" name="lineEdit">
              <property name="maximumSize">
               <size>
-               <width>130</width>
+               <width>100</width>
                <height>16777215</height>
               </size>
              </property>
@@ -190,7 +230,7 @@
               <string notr="true">background-color: transparent;</string>
              </property>
              <property name="text">
-              <string>限制上下文最大回合数</string>
+              <string>上下文记忆上限：</string>
              </property>
              <property name="frame">
               <bool>false</bool>
@@ -207,7 +247,7 @@
             <widget class="QLineEdit" name="lineEdit_rounds">
              <property name="maximumSize">
               <size>
-               <width>40</width>
+               <width>80</width>
                <height>16777215</height>
               </size>
              </property>
@@ -224,8 +264,17 @@
            </item>
            <item>
             <widget class="QSlider" name="horizontalSlider_rounds">
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>30</number>
+             </property>
+             <property name="pageStep">
+              <number>1</number>
+             </property>
              <property name="value">
-              <number>0</number>
+              <number>1</number>
              </property>
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
