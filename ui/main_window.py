@@ -30,14 +30,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.base64_image = None
 
-        self.horizontalLayout_4.removeWidget(self.plainTextEdit_input)
         self.plainTextEdit_input = MyPlainTextEdit()
         self.plainTextEdit_input.setObjectName("plainTextEdit_input")
-
-        # 通过remove将按钮拿出来，先添加输入框再添加按钮，使其相对位置不变
-        self.horizontalLayout_4.removeItem(self.verticalLayout_2)
-        self.horizontalLayout_4.addWidget(self.plainTextEdit_input)
-        self.horizontalLayout_4.addItem(self.verticalLayout_2)
 
         # 连接信号与槽
         self.pushButton_send.clicked.connect(self.on_send_button_clicked)

@@ -162,29 +162,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </property>
           </widget>
           <widget class="QWidget" name="layoutWidget_4">
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <layout class="QVBoxLayout" name="verticalLayout_6">
             <item>
-             <widget class="QPlainTextEdit" name="plainTextEdit_input">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="toolTip">
-               <string/>
-              </property>
-              <property name="undoRedoEnabled">
-               <bool>true</bool>
-              </property>
-              <property name="overwriteMode">
-               <bool>false</bool>
-              </property>
-              <property name="placeholderText">
-               <string>发送消息给 GPTalks...</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <layout class="QVBoxLayout" name="verticalLayout_2">
-              <item>
+             <layout class="QHBoxLayout" name="horizontalLayout">
+              <item alignment="Qt::AlignLeft">
                <widget class="QPushButton" name="pushButton_upload">
                 <property name="toolTip">
                  <string>支持上传1张图片
@@ -217,7 +198,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                 </property>
                </widget>
               </item>
-              <item>
+              <item alignment="Qt::AlignRight">
                <widget class="QPushButton" name="pushButton_send">
                 <property name="toolTip">
                  <string>[回车键]换行，[ctrl+回车键]发送</string>
@@ -238,6 +219,25 @@ li.checked::marker { content: &quot;\2612&quot;; }
                </widget>
               </item>
              </layout>
+            </item>
+            <item>
+             <widget class="QPlainTextEdit" name="plainTextEdit_input">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="toolTip">
+               <string/>
+              </property>
+              <property name="undoRedoEnabled">
+               <bool>true</bool>
+              </property>
+              <property name="overwriteMode">
+               <bool>false</bool>
+              </property>
+              <property name="placeholderText">
+               <string>发送消息给 GPTalks...</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
