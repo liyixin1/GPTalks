@@ -20,7 +20,7 @@ class ListWidgetItem(QtWidgets.QListWidgetItem):
             }
         ]
 
-    def get_record(self, user_input, user_image, item_name, parent) -> str:
+    def get_record(self, user_input, user_image, item_name) -> str:
         """处理用户输入，调用AI模型生成回复，并将聊天记录保存及展示。"""
         if not user_input:
             return self.record_to_display_text()
@@ -31,22 +31,16 @@ class ListWidgetItem(QtWidgets.QListWidgetItem):
         chat_record_log.chat_debug(self.record)
 
         # 尝试生成AI回复
-        try:
-            chat_reply = aimodel.start(self.record)
-            print(chat_reply)
-            # 检查回复中是否有错误信息
-            if 'error' in chat_reply:
-                raise ValueError(f"API Error: {chat_reply['error']['message']}")
-            # 保存AI回复至记录中
-            self.record.append(chat_reply)
-            chat_record_log.save_record_to_log(self.record[-1], item_name)
-            return self.record_to_display_text()
-        except TypeError as e:
-            QtWidgets.QMessageBox.warning(parent, "警告", f"出现错误，请检查配置: {str(e)}")
-            # 恢复记录状态
+        chat_reply = aimodel.start(self.record)
+        # 检查回复中是否有错误信息
+        if 'Error' in chat_reply:
             self.record.pop()
-            self.record.pop()
-            return self.record_to_display_text()
+            return chat_reply
+        # 保存AI回复至记录中
+        self.record.append(chat_reply)
+        chat_record_log.save_record_to_log(self.record[-1], item_name)
+        return self.record_to_display_text()
+
 
     def record_to_display_text(self) -> str:
         """将聊天记录转换为Markdown格式的HTML文本显示。"""

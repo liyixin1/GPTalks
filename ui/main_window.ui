@@ -255,7 +255,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             </property>
             <property name="minimumSize">
              <size>
-              <width>30</width>
+              <width>0</width>
               <height>0</height>
              </size>
             </property>
@@ -274,7 +274,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
            <widget class="QLabel" name="label_file">
             <property name="minimumSize">
              <size>
-              <width>30</width>
+              <width>0</width>
               <height>0</height>
              </size>
             </property>

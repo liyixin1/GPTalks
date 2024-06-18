@@ -4,6 +4,8 @@ main_windows.py
 """
 import base64
 from concurrent.futures import ThreadPoolExecutor
+
+from PyQt6 import QtWidgets
 from PyQt6.QtCore import QObject, pyqtSignal, Qt, QEvent, QBuffer, QIODevice
 from PyQt6.QtGui import QPixmap, QImage
 from PyQt6.QtWidgets import QMainWindow, QFileDialog
@@ -18,6 +20,7 @@ class Communicate(QObject):
     """定义信号"""
     text_ready = pyqtSignal(tuple)
     input_clear = pyqtSignal()
+    error_handling = pyqtSignal(str)
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -30,8 +33,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.base64_image = None
 
+        self.verticalLayout_6.removeWidget(self.plainTextEdit_input)
         self.plainTextEdit_input = MyPlainTextEdit()
         self.plainTextEdit_input.setObjectName("plainTextEdit_input")
+        self.verticalLayout_6.addWidget(self.plainTextEdit_input)
 
         # 连接信号与槽
         self.pushButton_send.clicked.connect(self.on_send_button_clicked)
@@ -49,6 +54,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # 用于线程安全GUI更新的通信
         self.communicate.text_ready.connect(self.update_text_browser)
         self.communicate.input_clear.connect(self.clear_input)
+        self.communicate.error_handling.connect(self.error_handling)
         # 安装事件过滤器
         self.label_image.installEventFilter(self)
 
@@ -71,10 +77,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             input_text,
             self.base64_image,
             self.listWidget_session.currentItem().text(),
-            self,
         )
-        self.communicate.text_ready.emit((current_item, text))
-        self.base64_image = None
+        if "Error" in text:
+            self.communicate.error_handling.emit(text)
+        else:
+            self.communicate.text_ready.emit((current_item, text))
+            self.base64_image = None
 
     def update_text_browser(self, item_text_pair):
         """用新的文本更新QTextBrowser。"""
@@ -87,6 +95,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """清除输入框内容"""
         self.plainTextEdit_input.clear()
         self.label_image.clear()
+
+    def error_handling(self, e):
+        """错误处理"""
+        QtWidgets.QMessageBox.warning(self, "警告", f"出现错误,请检查: {str(e)}")
 
     # 发送按钮处理模块--------------------------------------------------↑
 

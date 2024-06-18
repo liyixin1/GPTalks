@@ -39,7 +39,6 @@ class AIModel:
             self.headers = {
                 'Accept': 'application/json',
                 'Authorization': 'Bearer ' + self.config["api_key"],
-                'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',
                 'Content-Type': 'application/json'
             }
             self.config["model"] = config.aimodel.model
@@ -49,33 +48,37 @@ class AIModel:
 
     def start(self, record):
         """入口函数"""
-        try:
-            # 获取AI响应
-            return self.get_ai_response(self.config["ai"], record)
-        except requests.exceptions.RequestException as e:
-            # 处理网络请求异常，如连接错误、超时等
-            print(f"Network request failed: {e}")
-            return None
-        except (ValueError, TypeError) as e:
-            # 处理可能的JSON解析错误或其他值错误
-            print(f"JSON parsing or type error occurred: {e}")
-            return None
+        # 获取AI响应
+        return self.get_ai_response(self.config["ai"], record)
 
     def get_ai_response(self, model, record):
         """通过POST请求向指定的AI模型发送数据，并接收响应"""
-        payload = json.dumps({
-            "model": self.config["model"],
-            "messages": self.limit_to_chat_rounds(record),
-            "max_tokens": self.config["max_tokens"]
-        })
-        response = requests.request("POST",
-                                    self.url[model],
-                                    headers=self.headers,
-                                    data=payload,
-                                    timeout=100,
-                                    )
-        response_json = response.json()
-        return response_json["choices"][0].get("message", [])
+        try:
+            payload = json.dumps({
+                "model": self.config["model"],
+                "messages": self.limit_to_chat_rounds(record),
+                "max_tokens": self.config["max_tokens"]
+            })
+            response = requests.request("POST",
+                                        self.url[model],
+                                        headers=self.headers,
+                                        data=payload,
+                                        timeout=100,
+                                        )
+            response_json = response.json()
+            if 'error' in response_json:
+                raise KeyError(response_json['error']['message'])
+            return response_json["choices"][0].get("message", [])
+        except requests.exceptions.HTTPError as e:
+            return f"HTTP Error: {e.response.status_code} - {e.response.text}"
+        except requests.exceptions.Timeout as e:
+            return f"Timeout Error: {e}"
+        except requests.exceptions.RequestException as e:
+            return f"Request Exception: {e}"
+        except json.decoder.JSONDecodeError as e:
+            return f"JSON Decode Error: {e}"
+        except KeyError as e:
+            return f"Key Error: {e}"
 
     def limit_to_chat_rounds(self, record) -> list:
         """多轮对话控制器，当超出用户设置的回合数后即触发丢弃一回合对话内容，先进先出。"""
