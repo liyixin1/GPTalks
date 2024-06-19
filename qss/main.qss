@@ -1,0 +1,44 @@
+/* 设置整个窗口背景色和字体样式 */
+QWidget {
+    background-color: #F2F2F2; /* 浅灰色背景 */
+    font-family: 'Microsoft YaHei', Arial, sans-serif;
+    font-size: 14px;
+}
+
+/* 设置普通按钮的样式，减少绿色的突兀感 */
+QPushButton {
+    background-color: #F2F2F2; /* 与窗口背景色相同 */
+    color: #333333;
+    border: 1px solid #CCCCCC; /* 细边框 */
+    border-radius: 4px;
+    padding: 6px 10px;
+    transition: all 0.2s ease; /* 过渡效果 */
+}
+
+QPushButton:hover {
+    background-color: #E0E0E0; /* 悬停时颜色变化更柔和 */
+    border-color: #999999; /* 边框颜色变深 */
+}
+
+QPushButton:pressed {
+    background-color: #D3D3D3; /* 点击时颜色更深 */
+}
+
+/* 设置发送按钮的样式，使用蓝色调以保持整体色调的一致性 */
+#pushButton_send {
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+#pushButton_send:hover {
+    background-color: #1976D2;
+}
+
+#pushButton_send:pressed {
+    background-color: #0D47A1;
+}
