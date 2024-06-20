@@ -11,18 +11,10 @@ class AIModel:
     def __init__(self):
         thread = threading.Thread(target=self.set_ai_parameter)
         thread.start()
-        self.config = {
-            "ai": config.aimodel.ai,
-            "api_key": config.aimodel.api_key,
-            "model": config.aimodel.model,
-            "chat_rounds": config.aimodel.chat_rounds,
-            "max_tokens": config.aimodel.max_tokens,
-            "chat_prompt": config.aimodel.chat_prompt,
-        }
-
+        self.ai_parameter = config.aimodelconfigmanager.ai_parameter
         self.headers = {
             'Accept': 'application/json',
-            'Authorization': 'Bearer ' + self.config["api_key"],
+            'Authorization': 'Bearer ' + self.ai_parameter["api_key"],
             'Content-Type': 'application/json'
         }
         self.url = {
@@ -34,30 +26,25 @@ class AIModel:
         """线程无限等待，直到检测到用户更改设置信号的出现"""
         while True:
             config.event1.wait()
-            self.config["ai"] = config.aimodel.ai
-            self.config["api_key"] = config.aimodel.api_key
+            self.ai_parameter = config.aimodelconfigmanager.ai_parameter
             self.headers = {
                 'Accept': 'application/json',
-                'Authorization': 'Bearer ' + self.config["api_key"],
+                'Authorization': 'Bearer ' + self.ai_parameter["api_key"],
                 'Content-Type': 'application/json'
             }
-            self.config["model"] = config.aimodel.model
-            self.config["chat_rounds"] = config.aimodel.chat_rounds
-            self.config["max_tokens"] = config.aimodel.max_tokens
-            self.config["chat_prompt"] = config.aimodel.chat_prompt
 
     def start(self, record):
         """入口函数"""
         # 获取AI响应
-        return self.get_ai_response(self.config["ai"], record)
+        return self.get_ai_response(self.ai_parameter["ai"], record)
 
     def get_ai_response(self, model, record):
         """通过POST请求向指定的AI模型发送数据，并接收响应"""
         try:
             payload = json.dumps({
-                "model": self.config["model"],
+                "model": self.ai_parameter["model"],
                 "messages": self.limit_to_chat_rounds(record),
-                "max_tokens": self.config["max_tokens"]
+                "max_tokens": self.ai_parameter["max_tokens"]
             })
             response = requests.request("POST",
                                         self.url[model],
@@ -82,9 +69,9 @@ class AIModel:
 
     def limit_to_chat_rounds(self, record) -> list:
         """多轮对话控制器，当超出用户设置的回合数后即触发丢弃一回合对话内容，先进先出。"""
-        if (len(record)) > self.config["chat_rounds"] * 2:
+        if (len(record)) > self.ai_parameter["chat_rounds"] * 2:
             # +2绕开内容中的system内容
-            return record[(len(record)) - self.config["chat_rounds"] * 2 + 2:]
+            return record[(len(record)) - self.ai_parameter["chat_rounds"] * 2 + 2:]
         return record
 
     def user_input_image_to_record_item(self, user_input, user_image=None):

@@ -13,21 +13,20 @@ with open('./ai_model.json', "r", encoding='utf-8') as f:
 
 class SettingDialog(QDialog, Ui_settings_dialog):
     """继承GUI类，初始化界面并加载配置"""
-
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.add_to_combobox_ai()
 
-        self.lineEdit_key.setText(config.aimodel.api_key)
+        self.lineEdit_key.setText(config.aimodelconfigmanager.ai_parameter['api_key'])
         # max tokens
-        self.lineEdit_tokens.setText(str(config.aimodel.max_tokens))
-        self.horizontalSlider_tokens.setValue(config.aimodel.max_tokens)
+        self.lineEdit_tokens.setText(str(config.aimodelconfigmanager.ai_parameter['max_tokens']))
+        self.horizontalSlider_tokens.setValue(config.aimodelconfigmanager.ai_parameter['max_tokens'])
         # 上下文记忆数
-        self.lineEdit_rounds.setText(str(config.aimodel.chat_rounds))
-        self.horizontalSlider_rounds.setValue(config.aimodel.chat_rounds)
+        self.lineEdit_rounds.setText(str(config.aimodelconfigmanager.ai_parameter['chat_rounds']))
+        self.horizontalSlider_rounds.setValue(config.aimodelconfigmanager.ai_parameter['chat_rounds'])
 
-        self.plainTextEdit_prompt.setPlainText(config.aimodel.chat_prompt)
+        self.plainTextEdit_prompt.setPlainText(config.aimodelconfigmanager.ai_parameter['chat_prompt'])
         # 信号槽连接
         self.lineEdit_rounds.textChanged.connect(self.on_rounds_edit_changed)
         self.horizontalSlider_rounds.valueChanged.connect(self.on_rounds_slider_changed)
@@ -37,20 +36,20 @@ class SettingDialog(QDialog, Ui_settings_dialog):
 
         self.comboBox_AI.currentIndexChanged.connect(self.on_ai_combobox_changed)
 
-        self.comboBox_AI.setCurrentText(config.aimodel.ai)
+        self.comboBox_AI.setCurrentText(config.aimodelconfigmanager.ai_parameter['ai'])
         self.on_ai_combobox_changed()
-        self.comboBox_model.setCurrentText(config.aimodel.model)
+        self.comboBox_model.setCurrentText(config.aimodelconfigmanager.ai_parameter['model'])
 
         self.current_user = None
 
     def accept(self):
         """重写按下确定按钮信号的槽，修改当前的配置并发送信号到config.write_to_config()"""
-        config.aimodel.ai = self.comboBox_AI.currentText()
-        config.aimodel.api_key = self.lineEdit_key.text()
-        config.aimodel.model = self.comboBox_model.currentText()
-        config.aimodel.max_tokens = int(self.lineEdit_tokens.text())
-        config.aimodel.chat_rounds = int(self.lineEdit_rounds.text())
-        config.aimodel.chat_prompt = self.plainTextEdit_prompt.toPlainText()
+        config.aimodelconfigmanager.ai_parameter['ai'] = self.comboBox_AI.currentText()
+        config.aimodelconfigmanager.ai_parameter["api_key"] = self.lineEdit_key.text()
+        config.aimodelconfigmanager.ai_parameter['model'] = self.comboBox_model.currentText()
+        config.aimodelconfigmanager.ai_parameter['max_tokens'] = int(self.lineEdit_tokens.text())
+        config.aimodelconfigmanager.ai_parameter['chat_rounds'] = int(self.lineEdit_rounds.text())
+        config.aimodelconfigmanager.ai_parameter['chat_prompt'] = self.plainTextEdit_prompt.toPlainText()
         config.event1.set()
         config.event1.clear()
         self.close()
