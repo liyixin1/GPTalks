@@ -4,7 +4,7 @@ main_windows.py
 """
 import base64
 from concurrent.futures import ThreadPoolExecutor
-
+import re
 from PyQt6 import QtWidgets
 from PyQt6.QtCore import QObject, pyqtSignal, Qt, QEvent, QBuffer, QIODevice
 from PyQt6.QtGui import QPixmap, QImage
@@ -34,6 +34,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.loadStyleSheet(self.settings_dialog.ComboBox_theme.currentText())
 
         self.base64_image = None
+        self.current_theme = None
 
         self.verticalLayout_6.removeWidget(self.plainTextEdit_input)
         self.plainTextEdit_input = MyPlainTextEdit()
@@ -58,6 +59,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.communicate.input_clear.connect(self.clear_input)
         self.communicate.error_handling.connect(self.error_handling)
         self.settings_dialog.themeChanged.connect(self.changed_theme)
+        self.settings_dialog.fontSizeChanged.connect(self.changed_font_size)
         # 安装事件过滤器
         self.label_image.installEventFilter(self)
 
@@ -179,8 +181,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     return True  # 事件已被处理，不再传递
         return super().eventFilter(obj, event)
 
+    def changed_theme(self, current_theme):
+        """界面主题变动槽"""
+        if current_theme == '浅色模式':
+            self.current_theme = 'Light Mode'
+        elif current_theme == '深色模式':
+            self.current_theme = 'Dark Mode'
+        self.loadStyleSheet(self.current_theme)
+
     def loadStyleSheet(self, stylesheet):
-        """加载QSS样式表"""
+        """更换加载样式表"""
         if stylesheet == "Light Mode":
             with open('./qss/main_style_light.qss', 'r', encoding='utf-8') as f:
                 qss = f.read()
@@ -189,6 +199,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 qss = f.read()
         self.setStyleSheet(qss)
 
-    def changed_theme(self, current_theme):
-        """界面主题变动槽"""
-        self.loadStyleSheet(current_theme)
+    def changed_font_size(self, current_font_size):
+        """界面字体大小变动对应槽"""
+        self.modifyStylesheet(current_font_size)
+
+    def modifyStylesheet(self, fontsize):
+        """更新字体大小"""
+        stylesheet = ['./qss/main_style_light.qss', './qss/main_style_dark.qss']
+        for i in stylesheet:
+            with open(i, 'r', encoding='utf-8') as f:
+                stylesheet_r = f.read()
+            # 使用正则表达式修改字体大小
+            new_stylesheet_r = re.sub(r'font-size: \d+px;',
+                                      f'font-size: {fontsize}px;',
+                                      stylesheet_r)
+            with open(i, 'w', encoding='utf-8') as f:
+                f.write(new_stylesheet_r)
+        self.loadStyleSheet(self.current_theme)

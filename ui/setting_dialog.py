@@ -15,7 +15,7 @@ with open('./ai_model.json', "r", encoding='utf-8') as f:
 class SettingDialog(QDialog, Ui_settings_dialog):
     """继承GUI类，初始化界面并加载配置"""
     # 定义显示改变信号
-    fontSizeChanged = pyqtSignal(int)
+    fontSizeChanged = pyqtSignal(str)
     themeChanged = pyqtSignal(str)
     languageChanged = pyqtSignal(str)
 
@@ -31,6 +31,7 @@ class SettingDialog(QDialog, Ui_settings_dialog):
         self.horizontalSlider_rounds.setValue(config.configmanager.ai_parameter['chat_rounds'])
         self.plainTextEdit_prompt.setPlainText(config.configmanager.ai_parameter['chat_prompt'])
         self.ComboBox_theme.setCurrentText(config.configmanager.display['theme'])
+        self.ComboBox_font_size.setCurrentText(config.configmanager.display['font_size'])
 
         # 信号槽连接
         self.lineEdit_rounds.textChanged.connect(self.on_rounds_edit_changed)
@@ -54,7 +55,10 @@ class SettingDialog(QDialog, Ui_settings_dialog):
         config.configmanager.ai_parameter['chat_rounds'] = int(self.lineEdit_rounds.text())
         config.configmanager.ai_parameter['chat_prompt'] = self.plainTextEdit_prompt.toPlainText()
         config.configmanager.display['theme'] = self.ComboBox_theme.currentText()
+        config.configmanager.display['font_size'] = self.ComboBox_font_size.currentText()
         self.themeChanged.emit(self.ComboBox_theme.currentText())
+        self.fontSizeChanged.emit(self.ComboBox_font_size.currentText())
+
         config.event1.set()
         config.event1.clear()
         self.close()
