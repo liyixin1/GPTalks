@@ -16,7 +16,7 @@ def read_toml_file(file_path):
 event1 = threading.Event()
 
 
-class AIModelConfigManager:
+class ConfigManager:
     """配置模型参数"""
     def __init__(self):
         self.thread = threading.Thread(target=self.write_to_config)
@@ -28,6 +28,11 @@ class AIModelConfigManager:
             "chat_rounds": self.read_toml_file("config.toml")["ai_model"]["chat_rounds"],
             "max_tokens": self.read_toml_file("config.toml")["ai_model"]["max_tokens"],
             "chat_prompt": self.read_toml_file("config.toml")["ai_model"]["chat_prompt"]
+        }
+        self.display = {
+            'language': self.read_toml_file('config.toml')["display"]["language"],
+            'theme': self.read_toml_file('config.toml')["display"]["theme"],
+            'font_size': self.read_toml_file('config.toml')["display"]["font_size"],
         }
 
     def read_toml_file(self, file_path):
@@ -48,10 +53,14 @@ class AIModelConfigManager:
             data['ai_model']['max_tokens'] = int(self.ai_parameter['max_tokens'])
             data['ai_model']['chat_rounds'] = int(self.ai_parameter['chat_rounds'])
             data['ai_model']['chat_prompt'] = self.ai_parameter['chat_prompt']
+
+            data['display']['language'] = self.display['language']
+            data['display']['theme'] = self.display['theme']
+            data['display']['font_size'] = self.display['font_size']
             # 将修改后的数据写回文件
             with open('config.toml', 'w', encoding='utf-8') as f:
                 f.write(tomlkit.dumps(data))
             print("write_to_config yes")
 
 
-aimodelconfigmanager = AIModelConfigManager()
+configmanager = ConfigManager()

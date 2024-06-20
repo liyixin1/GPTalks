@@ -84,12 +84,12 @@ class Ui_MainWindow(object):
         self.splitter_3.setObjectName("splitter_3")
         self.textBrowser_show = QtWidgets.QTextBrowser(parent=self.splitter_3)
         font = QtGui.QFont()
-        font.setFamily("Segoe UI Emoji")
+        font.setFamily("Microsoft YaHei UI")
         font.setPointSize(12)
         font.setBold(False)
         font.setItalic(False)
         self.textBrowser_show.setFont(font)
-        self.textBrowser_show.setStyleSheet("font: 12pt \"Segoe UI Emoji\";")
+        self.textBrowser_show.setStyleSheet("")
         self.textBrowser_show.setReadOnly(True)
         self.textBrowser_show.setOpenExternalLinks(True)
         self.textBrowser_show.setObjectName("textBrowser_show")
@@ -175,8 +175,8 @@ class Ui_MainWindow(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:\'Segoe UI Emoji\'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
+"</style></head><body style=\" font-family:\'Microsoft YaHei UI\'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Segoe UI Emoji\';\"><br /></p></body></html>"))
         self.pushButton_upload.setToolTip(_translate("MainWindow", "支持上传1张图片\n"
 "最大20MB"))
         self.pushButton_upload.setText(_translate("MainWindow", "图片"))

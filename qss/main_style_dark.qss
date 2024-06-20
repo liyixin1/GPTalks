@@ -1,0 +1,118 @@
+/* 全局样式 */
+QWidget {
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+/* 按钮样式 */
+QPushButton {
+    background-color: #3c3c3c;
+    color: #d4d4d4;
+    border: 1px solid #4d4d4d;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+QPushButton:hover {
+    background-color: #505050;
+}
+
+QPushButton:pressed {
+    background-color: #5a5a5a;
+}
+
+/* 文本输入框样式 */
+QLineEdit {
+    background-color: #2d2d2d;
+    color: #d4d4d4;
+    border: 1px solid #3c3c3c;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+/* 标签样式 */
+QLabel {
+    color: #d4d4d4;
+}
+
+/* 垂直滚动条样式 */
+QScrollBar:vertical {
+    background: #333333;
+    width: 12px;
+    margin: 0px 3px 0px 3px;
+}
+
+QScrollBar::handle:vertical {
+    background: #4d4d4d;
+    min-height: 20px;
+    border-radius: 5px;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    background: #333333;
+    height: 14px;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+    background: #333333;
+}
+
+/* 列表部件样式 */
+QListWidget {
+    background-color: #252526;
+    color: #d4d4d4;
+    border: 1px solid #3c3c3c;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+QListWidget::item {
+    padding: 5px;
+    border-bottom: 1px solid #3c3c3c;
+}
+
+QListWidget::item:selected {
+    background-color: #373737;
+    color: #d4d4d4;
+}
+
+/* 文本浏览器样式 */
+QTextBrowser {
+    background-color: #252526;
+    color: #d4d4d4;
+    border: 1px solid #3c3c3c;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+/* 纯文本编辑器样式 */
+QPlainTextEdit {
+    background-color: #252526;
+    color: #d4d4d4;
+    border: 1px solid #3c3c3c;
+    border-radius: 5px;
+    padding: 5px;
+}
+/* 设置发送按钮的样式，使用蓝色调以保持整体色调的一致性 */
+#pushButton_send {
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+#pushButton_send:hover {
+    background-color: #1976D2;
+}
+
+#pushButton_send:pressed {
+    background-color: #0D47A1;
+}

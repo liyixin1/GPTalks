@@ -16,7 +16,7 @@ class ListWidgetItem(QtWidgets.QListWidgetItem):
         self.record = [
             {
                 "role": "system",
-                "content": aimodel.config["chat_prompt"]
+                "content": aimodel.ai_parameter["chat_prompt"] + "确保你回答的内容格式是markdown。"
             }
         ]
 
@@ -82,4 +82,4 @@ class ListWidgetItem(QtWidgets.QListWidgetItem):
 
     def get_current_model(self):
         """主窗口调用，返回当前的model"""
-        return aimodel.config["model"]
+        return aimodel.ai_parameter["model"]

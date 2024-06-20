@@ -28,9 +28,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def __init__(self):
         super().__init__()
-        self.settings_dialog = None
-        self.about_dialog = None
         self.setupUi(self)
+        self.settings_dialog = SettingDialog()
+        self.about_dialog = AboutDialog()
+        self.loadStyleSheet(self.settings_dialog.ComboBox_theme.currentText())
+
         self.base64_image = None
 
         self.verticalLayout_6.removeWidget(self.plainTextEdit_input)
@@ -55,6 +57,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.communicate.text_ready.connect(self.update_text_browser)
         self.communicate.input_clear.connect(self.clear_input)
         self.communicate.error_handling.connect(self.error_handling)
+        self.settings_dialog.themeChanged.connect(self.changed_theme)
         # 安装事件过滤器
         self.label_image.installEventFilter(self)
 
@@ -130,12 +133,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def on_setting_button_clicked(self):
         """显示设置窗口。"""
-        self.settings_dialog = SettingDialog()
         self.settings_dialog.show()
 
     def on_about_button_clicked(self):
         """显示关于窗口"""
-        self.about_dialog = AboutDialog()
         self.about_dialog.exec()
 
     def on_upload_button_clicked(self):
@@ -177,3 +178,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.label_image.setPixmap(QPixmap())  # 清除图片
                     return True  # 事件已被处理，不再传递
         return super().eventFilter(obj, event)
+
+    def loadStyleSheet(self, stylesheet):
+        """加载QSS样式表"""
+        if stylesheet == "Light Mode":
+            with open('./qss/main_style_light.qss', 'r', encoding='utf-8') as f:
+                qss = f.read()
+        else:
+            with open('./qss/main_style_dark.qss', 'r', encoding='utf-8') as f:
+                qss = f.read()
+        self.setStyleSheet(qss)
+
+    def changed_theme(self, current_theme):
+        """界面主题变动槽"""
+        self.loadStyleSheet(current_theme)

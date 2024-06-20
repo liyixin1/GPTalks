@@ -11,7 +11,7 @@ class AIModel:
     def __init__(self):
         thread = threading.Thread(target=self.set_ai_parameter)
         thread.start()
-        self.ai_parameter = config.aimodelconfigmanager.ai_parameter
+        self.ai_parameter = config.configmanager.ai_parameter
         self.headers = {
             'Accept': 'application/json',
             'Authorization': 'Bearer ' + self.ai_parameter["api_key"],
@@ -26,7 +26,7 @@ class AIModel:
         """线程无限等待，直到检测到用户更改设置信号的出现"""
         while True:
             config.event1.wait()
-            self.ai_parameter = config.aimodelconfigmanager.ai_parameter
+            self.ai_parameter = config.configmanager.ai_parameter
             self.headers = {
                 'Accept': 'application/json',
                 'Authorization': 'Bearer ' + self.ai_parameter["api_key"],
