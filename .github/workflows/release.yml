@@ -34,15 +34,19 @@ jobs:
           pyinstaller --onefile --windowed main.py --distpath GPTalks -n GPTalks
           cp config.toml GPTalks/
           cp ai_model.json GPTalks/
+          cp -r qss GPTalks/
           cp LICENSE GPTalks/
           zip -r ${{ matrix.artifact_name }} GPTalks
 
       - name: Build (Windows)
         if: matrix.os == 'windows-latest'
         run: |
-          mkdir GPTalks
+          mkdir GPTalks  
           pyinstaller --onefile --windowed main.py  --distpath GPTalks --name GPTalks.exe
-          Copy-Item config.toml, ai_model.json, LICENSE -Destination GPTalks\
+          Copy-Item config.toml GPTalks\
+          Copy-Item ai_model.json GPTalks\
+          Copy-Item LICENSE GPTalks\
+          Copy-Item -Path qss -Destination GPTalks\ -Recurse -Force
           Write-Host ${{ matrix.artifact_name }}
           Compress-Archive -Path GPTalks\* -DestinationPath ${{ matrix.artifact_name }}
         shell: powershell
