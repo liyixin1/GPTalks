@@ -51,6 +51,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_about.clicked.connect(self.on_about_button_clicked)
         self.plainTextEdit_input.ctrlEnterPressed.connect(self.on_send_button_clicked)
         self.pushButton_upload.clicked.connect(self.on_upload_button_clicked)
+        self.plainTextEdit_input.textChanged.connect(self.changed_send_button_state)
 
         # 创建信号类对象
         self.communicate = Communicate()
@@ -62,10 +63,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.settings_dialog.fontSizeChanged.connect(self.changed_font_size)
         # 安装事件过滤器
         self.label_image.installEventFilter(self)
+        # 初始化状态
+        self.changed_send_button_state()
 
     # 发送按钮处理模块--------------------------------------------------↓
     def on_send_button_clicked(self):
         """处理发送按钮点击事件，即将输入的文本记录到当前选中的会话中。"""
+        if self.plainTextEdit_input.toPlainText() == "":
+            return
         executor = ThreadPoolExecutor(max_workers=1)
         self.pushButton_delect.setEnabled(False)
         current_item = self.listWidget_session.currentItem()
@@ -216,3 +221,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             with open(i, 'w', encoding='utf-8') as f:
                 f.write(new_stylesheet_r)
         self.loadStyleSheet(self.current_theme)
+
+    def changed_send_button_state(self):
+        """当输入为空时禁用发送按钮"""
+        if self.plainTextEdit_input.toPlainText() != "":
+            self.pushButton_send.setEnabled(True)
+        else:
+            self.pushButton_send.setEnabled(False)
