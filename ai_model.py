@@ -41,6 +41,8 @@ class AIModel:
     def get_ai_response(self, model, record):
         """通过POST请求向指定的AI模型发送数据，并接收响应"""
         try:
+            if self.ai_parameter['api_key'] == "":
+                raise ValueError()
             payload = json.dumps({
                 "model": self.ai_parameter["model"],
                 "messages": self.limit_to_chat_rounds(record),
@@ -62,10 +64,10 @@ class AIModel:
             return f"Timeout Error: {e}"
         except requests.exceptions.RequestException as e:
             return f"Request Exception: {e}"
-        except json.decoder.JSONDecodeError as e:
-            return f"JSON Decode Error: {e}"
         except KeyError as e:
             return f"Key Error: {e}"
+        except ValueError:
+            return "Value Error:密钥为空。"
 
     def limit_to_chat_rounds(self, record) -> list:
         """多轮对话控制器，当超出用户设置的回合数后即触发丢弃一回合对话内容，先进先出。"""
