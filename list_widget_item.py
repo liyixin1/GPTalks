@@ -41,7 +41,6 @@ class ListWidgetItem(QtWidgets.QListWidgetItem):
         chat_record_log.save_record_to_log(self.record[-1], item_name)
         return self.record_to_display_text()
 
-
     def record_to_display_text(self) -> str:
         """将聊天记录转换为Markdown格式的HTML文本显示。"""
         return_record = []

@@ -63,6 +63,45 @@ QScrollBar::add-page:vertical,
 QScrollBar::sub-page:vertical {
     background: #f0f0f0;
 }
+
+/* 列表部件样式 */
+QListWidget {
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    padding: 5px;
+
+}
+
+QListWidget::item {
+    padding: 5px;
+    border-bottom: 1px solid #dcdcdc;
+}
+
+QListWidget::item:selected {
+    background-color: #e0e0e0;
+    color: #000000;
+}
+
+/* 文本浏览器样式 */
+QTextBrowser {
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+/* 纯文本编辑器样式 */
+QPlainTextEdit {
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    padding: 5px;
+}
+
 /* 设置发送按钮的样式，使用蓝色调以保持整体色调的一致性 */
 #pushButton_send {
     background-color: #2196F3;

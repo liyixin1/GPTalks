@@ -7,7 +7,7 @@ from concurrent.futures import ThreadPoolExecutor
 import re
 from PyQt6 import QtWidgets
 from PyQt6.QtCore import QObject, pyqtSignal, Qt, QEvent, QBuffer, QIODevice
-from PyQt6.QtGui import QPixmap, QImage
+from PyQt6.QtGui import QPixmap, QImage, QIcon
 from PyQt6.QtWidgets import QMainWindow, QFileDialog
 from list_widget_item import ListWidgetItem
 from ui.about_dialog import AboutDialog
@@ -31,10 +31,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.settings_dialog = SettingDialog()
         self.about_dialog = AboutDialog()
-        self.loadStyleSheet(self.settings_dialog.ComboBox_theme.currentText())
-
         self.base64_image = None
         self.current_theme = None
+        self.loadStyleSheet(self.settings_dialog.ComboBox_theme.currentText())
+        self.list_widget_icon = {
+            'text': QIcon('ui/image/new_text.png'),
+            'image': QIcon('ui/image/new_image.png'),
+        }
 
         self.verticalLayout_6.removeWidget(self.plainTextEdit_input)
         self.plainTextEdit_input = MyPlainTextEdit()
@@ -44,7 +47,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # 连接信号与槽
         self.pushButton_send.clicked.connect(self.on_send_button_clicked)
         self.listWidget_session.currentItemChanged.connect(self.on_current_item_changed)
-        self.pushButton_new.clicked.connect(self.on_new_button_clicked)
+        self.pushButton_new_chat.clicked.connect(self.on_new_chat_button_clicked)
+        self.pushButton_new_images.clicked.connect(self.on_new_image_button_clicked)
         self.pushButton_delect.clicked.connect(self.on_delete_button_clicked)
         self.lineEdit_name.editingFinished.connect(self.on_session_name_editing_finished)
         self.pushButton_settings.clicked.connect(self.on_setting_button_clicked)
@@ -75,7 +79,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_delect.setEnabled(False)
         current_item = self.listWidget_session.currentItem()
         if self.listWidget_session.count() == 0:  # 如果当前不存在会话记录，则新建一个
-            self.on_new_button_clicked()
+            self.on_new_chat_button_clicked()
             current_item = self.listWidget_session.currentItem()  # 捕获当前对话项
         executor.submit(self._commit_button_clicked_task, current_item)
 
@@ -122,9 +126,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.textBrowser_show.setHtml(
                 self.listWidget_session.currentItem().record_to_display_text())
 
-    def on_new_button_clicked(self):
-        """新建一个会话项，并自动选中这个新会话项。"""
+    def on_new_chat_button_clicked(self):
+        """新建一个文本对话项，并自动选中这个新对话项。"""
         new_item = ListWidgetItem("对话" + str(self.listWidget_session.count() + 1))
+        new_item.setIcon(self.list_widget_icon.get('text'))
+        self.listWidget_session.addItem(new_item)
+        self.listWidget_session.setCurrentItem(new_item)
+
+    def on_new_image_button_clicked(self):
+        """新建一个图片项，并自动选中这个新图片项。"""
+        new_item = ListWidgetItem("对话" + str(self.listWidget_session.count() + 1))
+        new_item.setIcon(self.list_widget_icon.get('image'))
         self.listWidget_session.addItem(new_item)
         self.listWidget_session.setCurrentItem(new_item)
 
@@ -196,10 +208,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def loadStyleSheet(self, stylesheet):
         """更换加载样式表"""
+        qss = ''
         if stylesheet == "Light Mode":
             with open('./qss/main_style_light.qss', 'r', encoding='utf-8') as f:
                 qss = f.read()
-        else:
+        elif stylesheet == "Dark Mode":
             with open('./qss/main_style_dark.qss', 'r', encoding='utf-8') as f:
                 qss = f.read()
         self.setStyleSheet(qss)

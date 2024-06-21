@@ -39,21 +39,57 @@
       <widget class="QWidget" name="layoutWidget_3">
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <property name="sizeConstraint">
-         <enum>QLayout::SetMaximumSize</enum>
+         <enum>QLayout::SetDefaultConstraint</enum>
         </property>
         <item>
-         <widget class="QListWidget" name="listWidget_session"/>
+         <widget class="QListWidget" name="listWidget_session">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </widget>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
-           <widget class="QPushButton" name="pushButton_new">
+           <widget class="QPushButton" name="pushButton_new_chat">
             <property name="text">
              <string> 新建对话</string>
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>image/new.svg</normaloff>image/new.svg</iconset>
+              <normaloff>image/add.svg</normaloff>image/add.svg</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_new_images">
+            <property name="text">
+             <string>新图片</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>image/new_image.png</normaloff>image/new_image.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -64,7 +100,13 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>image/delect.svg</normaloff>image/delect.svg</iconset>
+              <normaloff>image/delete.svg</normaloff>image/delete.svg</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
             </property>
             <property name="checkable">
              <bool>false</bool>
@@ -89,7 +131,13 @@
           </property>
           <property name="icon">
            <iconset>
-            <normaloff>image/setting.svg</normaloff>image/setting.svg</iconset>
+            <normaloff>image/settings.svg</normaloff>image/settings.svg</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
           </property>
          </widget>
         </item>
@@ -102,12 +150,21 @@
            <iconset>
             <normaloff>image/about.svg</normaloff>image/about.svg</iconset>
           </property>
+          <property name="iconSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
          </widget>
         </item>
        </layout>
       </widget>
       <widget class="QWidget" name="verticalLayoutWidget_2">
        <layout class="QVBoxLayout" name="verticalLayout_5">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetDefaultConstraint</enum>
+        </property>
         <item>
          <widget class="QLineEdit" name="lineEdit_name">
           <property name="minimumSize">
@@ -187,6 +244,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
                  <iconset>
                   <normaloff>image/upload.svg</normaloff>image/upload.svg</iconset>
                 </property>
+                <property name="iconSize">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
+                </property>
                 <property name="autoDefault">
                  <bool>false</bool>
                 </property>
@@ -212,6 +275,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
                 <property name="icon">
                  <iconset>
                   <normaloff>image/send.svg</normaloff>image/send.svg</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
                 </property>
                 <property name="flat">
                  <bool>false</bool>
