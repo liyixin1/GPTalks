@@ -3,5 +3,5 @@ build/
 dist/*
 !dist/README.md
 *.spec
-chat_record_logs/
+chat_record_mds/
 test/

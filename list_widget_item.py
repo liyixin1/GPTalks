@@ -5,7 +5,7 @@ list_widget_item.py
 import markdown
 from PyQt6 import QtWidgets
 from ai_model import aimodel
-from chat_record import chat_record_log
+from chat_record import chat_record_md
 
 
 class ListWidgetItem(QtWidgets.QListWidgetItem):
@@ -27,8 +27,7 @@ class ListWidgetItem(QtWidgets.QListWidgetItem):
 
         # 将用户输入保存到记录中
         self.record.append(aimodel.user_input_image_to_record_item(user_input, user_image))
-        chat_record_log.save_record_to_log(self.record[-1], item_name)
-        chat_record_log.chat_debug(self.record)
+        chat_record_md.save_record_to_md(self.record[-1], item_name)
 
         # 尝试生成AI回复
         chat_reply = aimodel.start(self.record)
@@ -38,7 +37,7 @@ class ListWidgetItem(QtWidgets.QListWidgetItem):
             return chat_reply
         # 保存AI回复至记录中
         self.record.append(chat_reply)
-        chat_record_log.save_record_to_log(self.record[-1], item_name)
+        chat_record_md.save_record_to_md(self.record[-1], item_name)
         return self.record_to_display_text()
 
     def record_to_display_text(self) -> str:

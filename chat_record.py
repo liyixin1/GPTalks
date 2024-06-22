@@ -1,62 +1,45 @@
 """对话记录模块"""
-import base64
-import logging
 import os
 from datetime import datetime
 
 
-class ChatRecordLog:
+class ChatRecordMd:
     """聊天记录存储"""
+
     def __init__(self):
         self.today = datetime.now().date()
-        self.log_dir = './chat_record_logs/' + str(self.today)
-        self.image_dir = './chat_record_logs/' + str(self.today) + "-img"
-        self.user_log = logging.getLogger("user")
-        self.reply_log = logging.getLogger('assistant')
-        self.debug_log = logging.getLogger('debug')
-        if not os.path.exists(self.log_dir):
-            os.makedirs(self.log_dir)
-        if not os.path.exists(self.image_dir):
-            os.makedirs(self.image_dir)
+        self.dir = './chat_record_mds/' + str(self.today)
+        if not os.path.exists(self.dir):
+            os.makedirs(self.dir)
 
-    def save_record_to_log(self, record, item_name):
+    def save_record_to_md(self, record, item_name):
         """将对话记录保存到日志文件"""
-        log_file = str(datetime.now().date()) + '_' + item_name + '.log'
-        log_file_path = os.path.join(self.log_dir, log_file)
-        logging.basicConfig(filename=log_file_path,
-                            filemode='a',
-                            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                            datefmt='%a %d %b %Y %H:%M:%S',
-                            level=logging.INFO,
-                            encoding='utf-8')
-        if record['role'] == 'user':
-            for content_item in record['content']:
-                if 'text' in content_item:
-                    text = content_item['text'] + "\n"
-                    self.user_log.info(text)
-                elif 'image_url' in content_item:
-                    try:
-                        image_data = content_item['image_url']['url']
-                        # 使用split方法分割字符串
-                        parts = image_data.split("data:image/jpeg;base64,", 1)
-                        if len(parts) > 1:
-                            image_data = parts[1]
-                        else:
-                            image_data = parts[0]
-                        image_path = os.path.join(self.image_dir,
-                                                  f"{datetime.now().strftime('%Y%m%d%H%M%S')}.jpeg")
-                        with open(image_path, 'wb') as f:
-                            f.write(base64.b64decode(image_data))
-                        self.user_log.info(image_path)
-                    except IOError as e:
-                        logging.error(e)
-        elif record['role'] == 'assistant':
-            self.reply_log.info(record['content'])
+        md_file = str(datetime.now().date()) + '_' + item_name + '.md'
+        log_file_path = os.path.join(self.dir, md_file)
+        with open(log_file_path, 'a', encoding='utf-8') as f:
+            if record['role'] == 'user':
+                data = ""
+                for content_item in record['content']:
+                    if 'text' in content_item:
+                        data += content_item['text'] + "\n"
+                    elif 'image_url' in content_item:
+                        image_data_base64 = content_item['image_url']['url']
+                        image_data_html = f'<img src="{image_data_base64}"/>\n'
+                        data += image_data_html
+                self.write_to_markdown_with_timestamp('user', f, data)
+            elif record['role'] == 'assistant':
+                text = record['content']
+                self.write_to_markdown_with_timestamp('assistant', f, text)
 
-    def chat_debug(self, record):
-        """记录错误警告"""
-        logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-        self.debug_log.debug(record)
+    def write_to_markdown_with_timestamp(self, role, file, content):
+        """写入文件"""
+        # 获取当前时间并格式化为字符串
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        # 构建Markdown格式的时间戳和内容
+        markdown_content = f"\n## {current_time}-{role}\n{content}\n"
+
+        file.write(markdown_content)
 
 
-chat_record_log = ChatRecordLog()
+chat_record_md = ChatRecordMd()
