@@ -12,6 +12,6 @@ cp config.toml GPTalks/
 cp ai_model.json GPTalks/
 cp -r qss GPTalks/
 cp LICENSE GPTalks/
-cp -r --parents ui/image GPTalks/
+cp -r --parents ui/images GPTalks/
 ```
 

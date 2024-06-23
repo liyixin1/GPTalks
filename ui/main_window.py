@@ -33,8 +33,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.about_dialog = AboutDialog()
         self.base64_image = None
         self.current_theme = None
-        self.list_widget_icon = {
+        self.icons = {
             'text': QIcon('ui/images/new_text.png'),
+            'button_send': QIcon('ui/images/send.svg'),
+            'button_upload': QIcon('ui/images/upload.svg'),
+            'button_add': QIcon('ui/images/add.svg'),
+            'button_delete': QIcon('ui/images/delete.svg'),
+            'button_settings': QIcon('ui/images/settings.svg'),
+            'button_about': QIcon('ui/images/about.svg'),
+            'window_logo': QIcon('ui/images/window_logo.svg'),
         }
 
         self.verticalLayout_6.removeWidget(self.plainTextEdit_input)
@@ -46,7 +53,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_send.clicked.connect(self.on_send_button_clicked)
         self.listWidget_session.currentItemChanged.connect(self.on_current_item_changed)
         self.pushButton_new_chat.clicked.connect(self.on_new_chat_button_clicked)
-        self.pushButton_delect.clicked.connect(self.on_delete_button_clicked)
+        self.pushButton_delete.clicked.connect(self.on_delete_button_clicked)
         self.lineEdit_name.editingFinished.connect(self.on_session_name_editing_finished)
         self.pushButton_settings.clicked.connect(self.on_setting_button_clicked)
         self.pushButton_about.clicked.connect(self.on_about_button_clicked)
@@ -67,6 +74,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # 初始化状态
         self.changed_send_button_state()
         self.changed_theme(self.settings_dialog.ComboBox_theme.currentText())
+        self.pushButton_send.setIcon(self.icons['button_send'])
+        self.pushButton_upload.setIcon(self.icons['button_upload'])
+        self.pushButton_delete.setIcon(self.icons['button_delete'])
+        self.pushButton_settings.setIcon(self.icons['button_settings'])
+        self.pushButton_about.setIcon(self.icons['button_about'])
+        self.pushButton_new_chat.setIcon(self.icons['button_add'])
+        self.setWindowIcon(self.icons['window_logo'])
 
     # 发送按钮处理模块--------------------------------------------------↓
     def on_send_button_clicked(self):
@@ -74,7 +88,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.plainTextEdit_input.toPlainText() == "":
             return
         executor = ThreadPoolExecutor(max_workers=1)
-        self.pushButton_delect.setEnabled(False)
+        self.pushButton_delete.setEnabled(False)
         current_item = self.listWidget_session.currentItem()
         if self.listWidget_session.count() == 0:  # 如果当前不存在会话记录，则新建一个
             self.on_new_chat_button_clicked()
@@ -109,7 +123,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # 还原滚动位置
         ver_scrollbar.setValue(ver_value)
         hor_scrollbar.setValue(hor_value)
-        self.pushButton_delect.setEnabled(True)
+        self.pushButton_delete.setEnabled(True)
 
     def clear_input(self):
         """清除输入框内容"""
@@ -135,7 +149,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def on_new_chat_button_clicked(self):
         """新建一个文本对话项，并自动选中这个新对话项。"""
         new_item = ListWidgetItem("对话" + str(self.listWidget_session.count() + 1))
-        new_item.setIcon(self.list_widget_icon.get('text'))
+        new_item.setIcon(self.icons.get('text'))
         self.listWidget_session.addItem(new_item)
         self.listWidget_session.setCurrentItem(new_item)
 

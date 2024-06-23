@@ -39,7 +39,6 @@ class Ui_about_dialog(object):
         self.label.setMinimumSize(QtCore.QSize(150, 150))
         self.label.setMaximumSize(QtCore.QSize(150, 150))
         self.label.setText("")
-        self.label.setPixmap(QtGui.QPixmap("C:\\Users\\13677\\Desktop\\graduation_project\\GPTalks\\ui\\image/gzasc.png"))
         self.label.setScaledContents(True)
         self.label.setObjectName("label")
         self.horizontalLayout.addWidget(self.label)

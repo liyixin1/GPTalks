@@ -36,7 +36,7 @@ jobs:
           cp ai_model.json GPTalks/
           cp -r qss GPTalks/
           cp LICENSE GPTalks/
-          cp -r --parents ui/image GPTalks/
+          cp -r --parents ui/images GPTalks/
           zip -r ${{ matrix.artifact_name }} GPTalks
 
       - name: Build (Windows)
@@ -48,7 +48,7 @@ jobs:
           Copy-Item ai_model.json GPTalks\
           Copy-Item LICENSE GPTalks\
           Copy-Item -Path qss -Destination GPTalks\ -Recurse -Force
-          Copy-Item -Path ui\image -Destination GPTalks\ui\image -Recurse
+          Copy-Item -Path ui\images -Destination GPTalks\ui\images -Recurse
           Write-Host ${{ matrix.artifact_name }}
           Compress-Archive -Path GPTalks\* -DestinationPath ${{ matrix.artifact_name }}
         shell: powershell
