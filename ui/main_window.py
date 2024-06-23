@@ -33,10 +33,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.about_dialog = AboutDialog()
         self.base64_image = None
         self.current_theme = None
-        self.loadStyleSheet(self.settings_dialog.ComboBox_theme.currentText())
         self.list_widget_icon = {
             'text': QIcon('ui/image/new_text.png'),
-            'image': QIcon('ui/image/new_image.png'),
         }
 
         self.verticalLayout_6.removeWidget(self.plainTextEdit_input)
@@ -48,7 +46,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_send.clicked.connect(self.on_send_button_clicked)
         self.listWidget_session.currentItemChanged.connect(self.on_current_item_changed)
         self.pushButton_new_chat.clicked.connect(self.on_new_chat_button_clicked)
-        self.pushButton_new_images.clicked.connect(self.on_new_image_button_clicked)
         self.pushButton_delect.clicked.connect(self.on_delete_button_clicked)
         self.lineEdit_name.editingFinished.connect(self.on_session_name_editing_finished)
         self.pushButton_settings.clicked.connect(self.on_setting_button_clicked)
@@ -69,6 +66,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.label_image.installEventFilter(self)
         # 初始化状态
         self.changed_send_button_state()
+        self.changed_theme(self.settings_dialog.ComboBox_theme.currentText())
 
     # 发送按钮处理模块--------------------------------------------------↓
     def on_send_button_clicked(self):
@@ -130,13 +128,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """新建一个文本对话项，并自动选中这个新对话项。"""
         new_item = ListWidgetItem("对话" + str(self.listWidget_session.count() + 1))
         new_item.setIcon(self.list_widget_icon.get('text'))
-        self.listWidget_session.addItem(new_item)
-        self.listWidget_session.setCurrentItem(new_item)
-
-    def on_new_image_button_clicked(self):
-        """新建一个图片项，并自动选中这个新图片项。"""
-        new_item = ListWidgetItem("对话" + str(self.listWidget_session.count() + 1))
-        new_item.setIcon(self.list_widget_icon.get('image'))
         self.listWidget_session.addItem(new_item)
         self.listWidget_session.setCurrentItem(new_item)
 
@@ -210,10 +201,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """更换加载样式表"""
         qss = ''
         if stylesheet == "Light Mode":
-            with open('./qss/main_style_light.qss', 'r', encoding='utf-8') as f:
+            with open('qss/main_style_light.qss', 'r', encoding='utf-8') as f:
                 qss = f.read()
         elif stylesheet == "Dark Mode":
-            with open('./qss/main_style_dark.qss', 'r', encoding='utf-8') as f:
+            with open('qss/main_style_dark.qss', 'r', encoding='utf-8') as f:
                 qss = f.read()
         self.setStyleSheet(qss)
 
@@ -223,7 +214,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def modifyStylesheet(self, fontsize):
         """更新字体大小"""
-        stylesheet = ['./qss/main_style_light.qss', './qss/main_style_dark.qss']
+        stylesheet = ['qss/main_style_light.qss', 'qss/main_style_dark.qss']
         for i in stylesheet:
             with open(i, 'r', encoding='utf-8') as f:
                 stylesheet_r = f.read()

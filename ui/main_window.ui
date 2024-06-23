@@ -77,23 +77,6 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_new_images">
-            <property name="text">
-             <string>新图片</string>
-            </property>
-            <property name="icon">
-             <iconset>
-              <normaloff>image/new_image.png</normaloff>image/new_image.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>20</width>
-              <height>20</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QPushButton" name="pushButton_delect">
             <property name="text">
              <string> 删除对话</string>
