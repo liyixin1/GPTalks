@@ -8,7 +8,10 @@
 ## 打包软件
 ```shell
 pyinstaller --onefile --windowed main.py -n GPTalks.exe
-cp config.toml dist/
-cp ai_model.json dist/
+cp config.toml GPTalks/
+cp ai_model.json GPTalks/
+cp -r qss GPTalks/
+cp LICENSE GPTalks/
+cp -r --parents ui/image GPTalks/
 ```
 
