@@ -31,7 +31,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           mkdir GPTalks
-          pyinstaller --onefile --windowed main.py --distpath GPTalks -n GPTalks
+          pyinstaller --onefile --windowed main.py --distpath GPTalks -n GPTalks -i ui/images/window_logo.ico
           cp config.toml GPTalks/
           cp ai_model.json GPTalks/
           cp -r qss GPTalks/
@@ -43,7 +43,7 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: |
           mkdir GPTalks  
-          pyinstaller --onefile --windowed main.py  --distpath GPTalks --name GPTalks.exe
+          pyinstaller --onefile --windowed main.py  --distpath GPTalks --name GPTalks.exe -i ui\images\window_logo.ico
           Copy-Item config.toml GPTalks\
           Copy-Item ai_model.json GPTalks\
           Copy-Item LICENSE GPTalks\

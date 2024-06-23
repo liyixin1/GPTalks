@@ -41,7 +41,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             'button_delete': QIcon('ui/images/delete.svg'),
             'button_settings': QIcon('ui/images/settings.svg'),
             'button_about': QIcon('ui/images/about.svg'),
-            'window_logo': QIcon('ui/images/window_logo.svg'),
+            'window_logo': QIcon('ui/images/window_logo.png'),
         }
 
         self.verticalLayout_6.removeWidget(self.plainTextEdit_input)
