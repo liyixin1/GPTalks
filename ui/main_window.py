@@ -34,7 +34,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.base64_image = None
         self.current_theme = None
         self.list_widget_icon = {
-            'text': QIcon('ui/image/new_text.png'),
+            'text': QIcon('ui/images/new_text.png'),
         }
 
         self.verticalLayout_6.removeWidget(self.plainTextEdit_input)
@@ -98,9 +98,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def update_text_browser(self, item_text_pair):
         """用新的文本更新QTextBrowser。"""
+        # 记录当前滚动位置
+        ver_scrollbar = self.textBrowser_show.verticalScrollBar()
+        hor_scrollbar = self.textBrowser_show.horizontalScrollBar()
+        ver_value = ver_scrollbar.value()
+        hor_value = hor_scrollbar.value()
         item, text = item_text_pair
         if self.listWidget_session.currentItem() == item:
             self.textBrowser_show.setHtml(text)
+        # 还原滚动位置
+        ver_scrollbar.setValue(ver_value)
+        hor_scrollbar.setValue(hor_value)
         self.pushButton_delect.setEnabled(True)
 
     def clear_input(self):
@@ -110,7 +118,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def error_handling(self, e):
         """错误处理"""
-        QtWidgets.QMessageBox.warning(self, "警告", f"出现错误,请检查: {str(e)}")
+        QtWidgets.QMessageBox.warning(self, "警告", f"出现错误,请检查:\n {str(e)}")
 
     # 发送按钮处理模块--------------------------------------------------↑
 
