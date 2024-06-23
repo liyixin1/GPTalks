@@ -57,17 +57,17 @@ class AIModel:
             response_json = response.json()
             if 'error' in response_json:
                 raise KeyError(response_json['error']['message'])
-            return response_json["choices"][0].get("message", [])
+            return {'OK': response_json["choices"][0].get("message", [])}
         except requests.exceptions.HTTPError as e:
-            return f"HTTP Error: {e.response.status_code} - {e.response.text}"
+            return {"Error": f"HTTP Error: {e.response.status_code} - {e.response.text}"}
         except requests.exceptions.Timeout as e:
-            return f"Timeout Error: {e}"
+            return {"Error": f"Timeout Error: {e}"}
         except requests.exceptions.RequestException as e:
-            return f"Request Exception: {e}"
+            return {"Error": f"Request Exception: {e}"}
         except KeyError as e:
-            return f"Key Error: {e}"
+            return {"Error: "f"Key Error: {e}"}
         except ValueError:
-            return "Value Error:密钥为空。"
+            return {"Error": "Value Error:密钥为空。"}
 
     def limit_to_chat_rounds(self, record) -> list:
         """多轮对话控制器，当超出用户设置的回合数后即触发丢弃一回合对话内容，先进先出。"""

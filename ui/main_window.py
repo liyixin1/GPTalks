@@ -90,10 +90,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.base64_image,
             self.listWidget_session.currentItem().text(),
         )
-        if "Error" in text:
-            self.communicate.error_handling.emit(text)
+        if text.get('Error') is not None:
+            self.communicate.error_handling.emit(text.get('Error'))
         else:
-            self.communicate.text_ready.emit((current_item, text))
+            self.communicate.text_ready.emit((current_item, text['OK']))
             self.base64_image = None
 
     def update_text_browser(self, item_text_pair):
