@@ -73,8 +73,42 @@ class ListWidgetItem(QtWidgets.QListWidgetItem):
                                           'tables',
                                       ]
                                       )
-        return html_text
+        # print(html_text)
+        self.set_code_styles(html_text)
+        return self.set_code_styles(html_text)
 
     def get_current_model(self):
         """主窗口调用，返回当前的model"""
         return aimodel.ai_parameter["model"]
+
+    def set_code_styles(self, html_text):
+        html_with_styles = f"""
+                <html>
+                <head>
+                    <style type="text/css">
+                        pre {{
+                                background-color: #2b2b2b; /* 深色背景 */
+                                color: #f8f8f2; /* 浅色文本 */
+                                font-family: 'Consolas', 'Courier New', Courier, monospace; /* 等宽字体 */
+                                padding: 15px; /* 增加内边距 */
+                                border-radius: 5px; /* 圆角 */
+                                border: 1px solid #ccc; /* 边框 */
+                                line-height: normal; /* 行间距 */
+                                overflow: auto; /* 显示滚动条 */
+                        }}
+                        code {{
+                                background-color: #2b2b2b; /* 深色背景 */
+                                color: #f8f8f2; /* 浅色文本 */
+                                font-family: 'Consolas', 'Courier New', Courier, monospace; /* 等宽字体 */
+                                padding: 0; /* 去除内边距 */
+                                margin: 0; /* 去除外边距 */
+                                line-height: normal; /* 行间距 */
+                        }}
+                    </style>
+                </head>
+                <body>
+                    {html_text}
+                </body>
+                </html>
+                """
+        return html_with_styles
