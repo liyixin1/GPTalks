@@ -82,6 +82,7 @@ class ListWidgetItem(QtWidgets.QListWidgetItem):
         return aimodel.ai_parameter["model"]
 
     def set_code_styles(self, html_text):
+        """处理显示效果"""
         html_with_styles = f"""
                 <html>
                 <head>
