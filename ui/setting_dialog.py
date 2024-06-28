@@ -90,5 +90,5 @@ class SettingDialog(QDialog, Ui_settings_dialog):
         """模型提供方变化信号对应槽，当选择了其他模型提供方时，模型参数同步变化到改提供方提供的模型"""
         ai = self.comboBox_AI.currentText()
         self.comboBox_model.clear()
-        for value in json_ai_model[ai]:
+        for value in json_ai_model[ai]['model']:
             self.comboBox_model.addItem(value)

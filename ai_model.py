@@ -17,10 +17,8 @@ class AIModel:
             'Authorization': 'Bearer ' + self.ai_parameter["api_key"],
             'Content-Type': 'application/json'
         }
-        self.url = {
-            'OpenAI': "https://api.openai.com/v1/chat/completions",
-            'Groq': "https://api.groq.com/openai/v1/chat/completions",
-        }
+        self.url = {}
+        self.get_ai_url()
 
     def set_ai_parameter(self):
         """线程无限等待，直到检测到用户更改设置信号的出现"""
@@ -54,6 +52,7 @@ class AIModel:
                                         data=payload,
                                         timeout=100,
                                         )
+            print(response)
             response_json = response.json()
             if 'error' in response_json:
                 raise KeyError(response_json['error']['message'])
@@ -97,6 +96,14 @@ class AIModel:
                 }
             })
         return messages[0]
+
+    def get_ai_url(self):
+        """读取配置文件中的URL"""
+        with open('ai_model.json', "r", encoding='utf-8') as f:
+            json_ai_model = json.load(f)
+        for i in json_ai_model:
+            self.url[i] = json_ai_model[i]['url']
+        f.close()
 
 
 aimodel = AIModel()
