@@ -82,7 +82,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_new_chat.setIcon(self.icons['button_add'])
         self.setWindowIcon(self.icons['window_logo'])
 
-    # 发送按钮处理模块--------------------------------------------------↓
+        # 设置拉伸因子，设置左侧和右侧的拉伸因子为1:2
+        self.splitter_2.setStretchFactor(0, 1)
+        self.splitter_2.setStretchFactor(1, 2)
+        # 设置上下拉伸因子为3:1
+        self.splitter_3.setStretchFactor(0, 3)
+        self.splitter_3.setStretchFactor(1, 1)
+
+        # 发送按钮处理模块--------------------------------------------------↓
+
     def on_send_button_clicked(self):
         """处理发送按钮点击事件，即将输入的文本记录到当前选中的会话中。"""
         if self.plainTextEdit_input.toPlainText() == "":
@@ -121,7 +129,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.listWidget_session.currentItem() == item:
             self.textBrowser_show.setHtml(text)
         # 还原滚动位置
-        ver_scrollbar.setValue(ver_value)
+        ver_scrollbar.setValue(ver_value + 50)
         hor_scrollbar.setValue(hor_value)
         self.pushButton_delete.setEnabled(True)
 
