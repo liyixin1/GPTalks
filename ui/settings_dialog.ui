@@ -90,6 +90,9 @@
              <property name="text">
               <string/>
              </property>
+             <property name="echoMode">
+              <enum>QLineEdit::PasswordEchoOnEdit</enum>
+             </property>
              <property name="placeholderText">
               <string>API Key</string>
              </property>

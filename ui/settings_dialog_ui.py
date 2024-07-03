@@ -48,6 +48,7 @@ class Ui_settings_dialog(object):
         self.lineEdit_key = QtWidgets.QLineEdit(parent=self.tab_model)
         self.lineEdit_key.setStyleSheet("font: 12pt \"Microsoft YaHei UI\";")
         self.lineEdit_key.setText("")
+        self.lineEdit_key.setEchoMode(QtWidgets.QLineEdit.EchoMode.PasswordEchoOnEdit)
         self.lineEdit_key.setObjectName("lineEdit_key")
         self.verticalLayout_5.addWidget(self.lineEdit_key)
         self.verticalLayout_3.addLayout(self.verticalLayout_5)
