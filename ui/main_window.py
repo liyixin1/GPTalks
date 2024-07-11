@@ -173,7 +173,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def on_setting_button_clicked(self):
         """显示设置窗口。"""
-        self.settings_dialog.__init__()
         self.settings_dialog.show()
 
     def on_about_button_clicked(self):
